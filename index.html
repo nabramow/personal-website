@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nicole Abramowski · Software Engineer</title>
+<meta name="description" content="Nicole Abramowski · software engineer in London. On the core team of Couchers.org, building you coming?. I build software that makes real life better." />
+<meta property="og:title" content="Nicole Abramowski · Software Engineer" />
+<meta property="og:description" content="I build software that makes real life better." />
+<meta property="og:type" content="website" />
+<meta name="robots" content="index, follow, noai, noimageai" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Shantell+Sans:ital,wght@0,400;0,600;1,500&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============================================================
+     THEME: evergreen + plum, with whimsy. Edit here to reskin.
+     ============================================================ */
+  :root{
+    --ink:        #17251F;
+    --paper:      #F5F2EA;
+    --paper-2:    #EAE7DC;
+    --green:      #2F6B4E;
+    --green-deep: #1E4A34;
+    --plum:       #8A3E6B;
+    --plum-deep:  #6A2C50;
+    --muted:      #5E6E64;
+    --line:       #D8DACD;
+
+    --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+    --font-body:    "Instrument Sans", system-ui, sans-serif;
+    --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+    --font-hand:    "Shantell Sans", "Comic Sans MS", cursive;
+
+    --maxw: 1080px;
+    --gutter: clamp(1.25rem, 5vw, 4rem);
+
+    /* hand-drawn wave used as an underline accent */
+    --wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 12 2 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 118 7' fill='none' stroke='%238A3E6B' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--font-body);
+    font-size:clamp(1rem, 0.95rem + 0.2vw, 1.075rem);
+    line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  a{ color:inherit; }
+  ::selection{ background:color-mix(in srgb, var(--plum) 24%, var(--paper)); color:var(--ink); }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding-inline:var(--gutter); }
+
+  .eyebrow{
+    font-family:var(--font-mono); font-size:.72rem; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--plum-deep);
+    display:inline-flex; align-items:center; gap:.45rem;
+  }
+  .eyebrow::before{ content:"✦"; color:var(--plum); font-size:.85em; }
+
+  /* doodle sparkle */
+  .spark{ display:inline-block; color:var(--plum); flex:0 0 auto; }
+  .spark svg{ width:100%; height:100%; display:block; fill:currentColor; }
+
+  /* ---------- Header ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:saturate(140%) blur(8px); border-bottom:2px dashed var(--line);
+  }
+  .site .wrap{ display:flex; align-items:center; justify-content:space-between; height:62px; }
+  .brand{ font-family:var(--font-hand); font-weight:600; font-size:1.15rem; letter-spacing:.01em; text-decoration:none; }
+  nav.top{ display:flex; gap:1.5rem; }
+  nav.top a{ font-family:var(--font-body); font-size:.9rem; text-decoration:none; color:var(--muted); transition:color .18s ease, transform .18s ease; }
+  nav.top a:hover, nav.top a:focus-visible{ color:var(--plum-deep); transform:rotate(-3deg); }
+  @media (max-width:640px){ nav.top{ display:none; } }
+  .site-right{ display:flex; align-items:center; gap:1.4rem; }
+  .social{ display:flex; align-items:center; gap:.85rem; }
+  .ico{ display:inline-flex; color:var(--muted); transition:color .18s ease, transform .18s ease; }
+  .ico:hover, .ico:focus-visible{ color:var(--plum-deep); transform:translateY(-2px) rotate(-4deg); }
+  .ico svg{ width:20px; height:20px; display:block; fill:currentColor; }
+
+  /* ---------- Hero ---------- */
+  .hero{ position:relative; padding-block: clamp(2.75rem, 7vw, 5rem) clamp(2.5rem, 6vw, 4rem); overflow:hidden; }
+  .hero .wrap{ position:relative; z-index:2; }
+  .float{ position:absolute; z-index:1; color:var(--plum); opacity:.45; pointer-events:none; }
+  .float.green{ color:var(--green); }
+  .float svg{ width:100%; height:100%; display:block; fill:currentColor; }
+  .float.f1{ width:34px; height:34px; top:8%; right:12%; animation:bob 6s ease-in-out infinite; }
+  .float.f2{ width:22px; height:22px; top:42%; left:4%; animation:bob 5s ease-in-out .6s infinite; }
+  .float.f3{ width:18px; height:18px; bottom:14%; right:26%; animation:bob 7s ease-in-out 1.1s infinite; }
+  @keyframes bob{ 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-9px) rotate(12deg); } }
+
+  .avatar-wrap{ position:relative; display:inline-block; margin-bottom:1.7rem; }
+  .avatar{
+    width:142px; height:142px;
+    border-radius:47% 53% 48% 52% / 52% 47% 53% 48%;
+    overflow:hidden; border:2.5px solid var(--ink);
+    background:radial-gradient(120% 120% at 30% 20%, color-mix(in srgb,var(--green) 22%, var(--paper-2)) 0%, var(--paper-2) 62%);
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-3deg); animation:wobble 8s ease-in-out infinite;
+    box-shadow:4px 5px 0 color-mix(in srgb, var(--plum) 30%, var(--paper));
+  }
+  @keyframes wobble{ 0%,100%{ transform:rotate(-3deg); } 50%{ transform:rotate(2deg); } }
+  .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .avatar .ph{ text-align:center; color:var(--muted); font-family:var(--font-hand); font-size:.95rem; line-height:1.2; }
+  .note-avatar{
+    position:absolute; left:158px; top:26px; white-space:nowrap;
+    font-family:var(--font-hand); color:var(--plum-deep); font-size:1.35rem;
+    transform:rotate(-7deg);
+  }
+  .note-avatar .arrow{ display:inline-block; width:44px; height:30px; color:var(--plum); vertical-align:middle; transform:rotate(4deg); }
+  .note-avatar .arrow svg{ width:100%; height:100%; }
+  @media (max-width:560px){ .note-avatar{ display:none; } }
+  .avatar-badge{ position:absolute; right:-4px; bottom:4px; width:44px; height:44px; border-radius:50%; background:var(--paper); border:2px solid var(--ink); box-shadow:2px 2px 0 color-mix(in srgb,var(--plum) 30%, var(--paper)); display:grid; place-items:center; z-index:3; animation:badgeBob 3s ease-in-out infinite; }
+  @keyframes badgeBob{ 0%,100%{ transform:translateY(0) rotate(-5deg); } 50%{ transform:translateY(-4px) rotate(5deg); } }
+  .avatar-badge .bi{ grid-area:1 / 1; width:22px; height:22px; color:var(--plum-deep); opacity:0; animation:iconCycle 10s infinite; }
+  .avatar-badge .bi:nth-child(2n){ color:var(--green-deep); }
+  .avatar-badge .bi svg{ width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  .avatar-badge .bi:nth-child(1){ animation-delay:0s; }
+  .avatar-badge .bi:nth-child(2){ animation-delay:2s; }
+  .avatar-badge .bi:nth-child(3){ animation-delay:4s; }
+  .avatar-badge .bi:nth-child(4){ animation-delay:6s; }
+  .avatar-badge .bi:nth-child(5){ animation-delay:8s; }
+  @keyframes iconCycle{ 0%{ opacity:0; transform:scale(.5) rotate(-12deg); } 2%{ opacity:1; transform:scale(1) rotate(0); } 16%{ opacity:1; transform:scale(1) rotate(0); } 20%{ opacity:0; transform:scale(.5) rotate(12deg); } 100%{ opacity:0; } }
+
+  h1.thesis{
+    font-family:var(--font-hand); font-weight:600;
+    font-size:clamp(2.15rem, 1.3rem + 4vw, 3.9rem);
+    line-height:1.14; letter-spacing:0; margin:0 0 1.25rem; text-wrap:balance; overflow-wrap:anywhere;
+  }
+  h1.thesis .u{ position:relative; color:var(--plum-deep); }
+  h1.thesis .u::after{
+    content:""; position:absolute; left:-2%; right:-2%; bottom:-.16em; height:.4em;
+    background:var(--wave) no-repeat; background-size:100% 100%;
+  }
+  .lede{ font-size:clamp(1.05rem, 1rem + 0.4vw, 1.24rem); color:var(--ink); max-width:44ch; margin-bottom:1.4rem; }
+  .meta{ font-family:var(--font-body); font-size:.9rem; color:var(--muted); margin-bottom:1.6rem; }
+  .hero-links{ display:flex; flex-wrap:wrap; gap:.65rem; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:.45rem;
+    font-family:var(--font-body); font-size:.92rem; font-weight:600;
+    text-decoration:none; padding:.62rem 1.15rem; border-radius:999px;
+    border:2px solid var(--ink); transition:all .18s ease;
+  }
+  .btn:hover, .btn:focus-visible{ transform:translateY(-2px) rotate(-1.5deg); }
+  .btn.primary{ background:var(--green); border-color:var(--ink); color:#fff; box-shadow:3px 3px 0 var(--ink); }
+  .btn.primary:hover{ background:var(--green-deep); box-shadow:1px 1px 0 var(--ink); }
+  .btn.ghost{ box-shadow:3px 3px 0 color-mix(in srgb,var(--plum) 30%, var(--paper)); }
+  .btn.ghost:hover{ background:var(--ink); color:var(--paper); box-shadow:1px 1px 0 var(--plum-deep); }
+
+  /* ---------- Squiggle divider ---------- */
+  .squig{ display:block; width:100%; height:20px; color:color-mix(in srgb,var(--plum) 55%, var(--paper)); opacity:.8; margin:0; }
+  .squig svg{ width:100%; height:100%; display:block; }
+
+  /* ---------- Section scaffold ---------- */
+  section{ padding-block: clamp(2.5rem, 5.5vw, 4rem); }
+  .row{ display:grid; grid-template-columns: 200px 1fr; gap:clamp(1.25rem, 4vw, 3rem); align-items:start; }
+  @media (max-width:720px){ .row{ grid-template-columns:1fr; gap:1rem; } }
+  .row .label{ position:sticky; top:78px; }
+  @media (max-width:720px){ .row .label{ position:static; } }
+
+  h2{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(1.5rem,1.2rem+1vw,2rem); letter-spacing:-0.01em;
+    line-height:1.1; margin-bottom:1rem;
+  }
+  h2::after{ content:""; display:block; width:70px; height:9px; margin-top:.4rem; background:var(--wave) no-repeat; background-size:100% 100%; }
+  p + p{ margin-top:1rem; }
+  .prose{ max-width:60ch; }
+  .prose a{ color:var(--green-deep); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1.5px; }
+  .prose strong{ font-weight:600; }
+  .term{ position:relative; color:var(--plum-deep); font-weight:600; }
+  .term::after{ content:""; position:absolute; left:0; right:0; bottom:-.12em; height:.32em; background:var(--wave) no-repeat; background-size:100% 100%; }
+
+  /* ---------- Work cards ---------- */
+  .work{ display:grid; gap:1.1rem; }
+  .prev{ border-top:2px dashed var(--line); padding-top:1.3rem; margin-top:.2rem; }
+  .card{
+    display:block; text-decoration:none; color:inherit;
+    background:var(--paper); border:2px solid var(--ink);
+    border-radius:16px; padding:clamp(1.25rem,3vw,1.75rem);
+    box-shadow:4px 4px 0 color-mix(in srgb,var(--plum) 26%, var(--paper));
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover, .card:focus-visible{ transform:rotate(-.7deg) translate(-2px,-3px); box-shadow:7px 8px 0 color-mix(in srgb,var(--green) 42%, var(--paper)); }
+  .card-top{ display:flex; align-items:center; gap:.7rem; margin-bottom:.7rem; flex-wrap:wrap; }
+  .card h3{ font-family:var(--font-display); font-weight:700; font-size:1.3rem; letter-spacing:-0.01em; }
+  .card-hook{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.05rem,1rem+0.4vw,1.24rem); line-height:1.18; letter-spacing:-0.01em; margin-bottom:.85rem; color:var(--ink); }
+  .tag{ font-family:var(--font-mono); font-size:.68rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:.3rem .65rem; border-radius:999px; display:inline-flex; align-items:center; gap:.4rem; border:1.5px solid var(--ink); }
+  .tag.now{ background:color-mix(in srgb,var(--green) 16%, var(--paper)); color:var(--green-deep); transform:rotate(2deg); }
+  .tag.now .mini{ width:7px; height:7px; border-radius:50%; background:var(--green); }
+  .tag.role{ background:color-mix(in srgb,var(--plum) 12%, var(--paper)); color:var(--plum-deep); transform:rotate(-2deg); }
+  .stack{ margin-top:1rem; display:flex; flex-wrap:wrap; gap:.45rem; }
+  .shot-row{ display:flex; gap:.7rem; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; margin:1.1rem 0 .3rem; padding-bottom:.7rem; scrollbar-width:thin; scrollbar-color:color-mix(in srgb,var(--plum) 45%, var(--paper)) transparent; }
+  .shot-row::-webkit-scrollbar{ height:6px; }
+  .shot-row::-webkit-scrollbar-thumb{ background:color-mix(in srgb,var(--plum) 45%, var(--paper)); border-radius:99px; }
+  .shot-row::-webkit-scrollbar-track{ background:transparent; }
+  .shot{ flex:0 0 auto; scroll-snap-align:start; border:2px solid var(--ink); border-radius:14px; overflow:hidden; background:var(--paper-2); display:flex; align-items:center; justify-content:center; }
+  .shot .ph{ color:var(--muted); font-family:var(--font-mono); font-size:.64rem; text-align:center; padding:.6rem; line-height:1.5; }
+  .shot img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .shot-row.phones .shot{ width:118px; aspect-ratio:9 / 18; }
+  .shot-row.web .shot{ width:86%; aspect-ratio:16 / 10; }
+  .store-badges{ display:flex; flex-wrap:wrap; gap:.6rem; margin:1.1rem 0 .2rem; }
+  .badge{ display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; background:var(--ink); color:#fff; border-radius:11px; padding:.5rem .9rem; transition:transform .18s ease; }
+  .badge:hover, .badge:focus-visible{ transform:translateY(-2px) rotate(-1.5deg); }
+  .badge svg{ flex:0 0 auto; }
+  .badge .b-txt{ display:flex; flex-direction:column; line-height:1.1; }
+  .badge .b-small{ font-size:.55rem; letter-spacing:.03em; text-transform:uppercase; opacity:.85; }
+  .badge .b-big{ font-size:.95rem; font-weight:600; letter-spacing:-.01em; }
+  .chip{ font-family:var(--font-mono); font-size:.7rem; color:var(--muted); border:1.5px solid var(--line); border-radius:7px; padding:.24rem .55rem; }
+  .card .go-more{ display:inline-block; margin-top:1rem; font-family:var(--font-hand); font-size:1.05rem; color:var(--green-deep); text-decoration:none; }
+  .card .go-more::after{ content:" ⇢"; transition:margin .18s ease; }
+  .card:hover .go-more::after{ margin-left:.3rem; }
+
+  /* ---------- Off-screen ---------- */
+  .quests{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; }
+  .quest{ border:2px solid var(--ink); border-radius:14px; padding:1.15rem 1.2rem; background:var(--paper); box-shadow:3px 3px 0 color-mix(in srgb,var(--green) 24%, var(--paper)); }
+  .quest:nth-child(2){ box-shadow:3px 3px 0 color-mix(in srgb,var(--plum) 26%, var(--paper)); }
+  .quest .q-head{ font-family:var(--font-hand); font-size:1.1rem; font-weight:600; color:var(--plum-deep); margin-bottom:.4rem; }
+  .quest p{ font-size:.96rem; }
+
+  .qlog-note{ font-family:var(--font-hand); color:var(--plum-deep); font-size:1.15rem; transform:rotate(-3deg); display:inline-block; margin-left:.5rem; }
+  .quest-log{ list-style:none; display:flex; flex-wrap:wrap; gap:1.4rem 1.6rem; margin-top:1.4rem; }
+  .quest-log li{
+    position:relative; background:var(--paper); border:2px solid var(--ink);
+    border-radius:14px; padding:1.2rem 1.25rem 1.1rem; max-width:330px;
+    font-size:1.04rem; line-height:1.4; display:flex; gap:.65rem; align-items:flex-start;
+    box-shadow:3px 3px 0 color-mix(in srgb,var(--plum) 32%, var(--paper));
+    transition:transform .2s ease;
+  }
+  .quest-log li::before{ /* tape */
+    content:""; position:absolute; top:-11px; left:50%; width:58px; height:18px;
+    transform:translateX(-50%) rotate(-5deg);
+    background:color-mix(in srgb,var(--plum) 20%, var(--paper));
+    border:1.5px dashed color-mix(in srgb,var(--plum) 45%, transparent);
+    border-radius:2px;
+  }
+  .quest-log li:nth-child(1){ transform:rotate(-2.5deg); background:color-mix(in srgb,var(--green) 9%, var(--paper)); box-shadow:3px 3px 0 color-mix(in srgb,var(--green) 40%, var(--paper)); }
+  .quest-log li:nth-child(2){ transform:rotate(1.8deg); }
+  .quest-log li:nth-child(3){ transform:rotate(-1deg); background:color-mix(in srgb,var(--plum) 9%, var(--paper)); }
+  .quest-log li:hover{ transform:rotate(0deg) scale(1.03); }
+  .quest-log .spark{ width:20px; height:20px; margin-top:.05em; }
+  .check{ width:18px; height:18px; border:2px solid var(--green-deep); border-radius:5px; margin-top:.12em; flex:0 0 auto; }
+  .quest-log.todo li{ background:color-mix(in srgb,var(--green) 7%, var(--paper)); box-shadow:3px 3px 0 color-mix(in srgb,var(--green) 34%, var(--paper)); }
+  .quest-log.todo li::before{ background:color-mix(in srgb,var(--green) 18%, var(--paper)); border-color:color-mix(in srgb,var(--green) 45%, transparent); }
+
+  /* ---------- Values ---------- */
+  .care-list{ list-style:none; display:grid; gap:1rem; max-width:62ch; }
+  .care-list li{ display:grid; grid-template-columns:auto 1fr; gap:.85rem; align-items:start; font-size:clamp(1.05rem,1rem+0.4vw,1.22rem); line-height:1.45; }
+  .care-list .spark{ width:20px; height:20px; margin-top:.2em; }
+  .care-list li:nth-child(2n) .spark{ color:var(--green); }
+  .books{ list-style:none; display:grid; gap:1.1rem; max-width:62ch; }
+  .book{ display:grid; grid-template-columns:auto 1fr; gap:.85rem; align-items:baseline; }
+  .book .spark{ width:18px; height:18px; margin-top:.15em; }
+  .book:nth-child(2n) .spark{ color:var(--green); }
+  .book-title{ font-family:var(--font-display); font-weight:700; font-size:1.12rem; letter-spacing:-.01em; }
+  .book-by{ color:var(--muted); font-size:.92rem; }
+  .book-note{ display:block; margin-top:.15rem; color:var(--muted); font-size:.95rem; line-height:1.4; }
+  .book-covers{ display:flex; flex-wrap:wrap; gap:1.5rem; }
+  .cover{ width:132px; }
+  .cover-art{ position:relative; aspect-ratio:2 / 3; border:2px solid var(--ink); border-radius:8px; overflow:hidden; background:var(--paper-2); box-shadow:3px 3px 0 color-mix(in srgb,var(--plum) 28%, var(--paper)); display:grid; place-items:center; transition:transform .2s ease; }
+  .cover:nth-child(odd) .cover-art{ transform:rotate(-2deg); }
+  .cover:nth-child(even) .cover-art{ transform:rotate(1.6deg); }
+  .cover-art:hover{ transform:rotate(0) scale(1.03); }
+  .cover-fallback{ position:absolute; inset:0; display:grid; place-items:center; padding:.55rem; text-align:center; font-family:var(--font-display); font-weight:700; font-size:.82rem; line-height:1.15; color:var(--ink); }
+  .cover-art img{ position:relative; width:100%; height:100%; object-fit:cover; display:block; }
+  .cover-cap{ margin-top:.55rem; display:flex; flex-direction:column; }
+  .cover-title{ font-family:var(--font-display); font-weight:700; font-size:.9rem; line-height:1.15; }
+  .cover-by{ color:var(--muted); font-size:.78rem; }
+  .cover-note{ color:var(--muted); font-size:.8rem; margin-top:.25rem; line-height:1.35; }
+  .likes{ columns:2; column-gap:2.5rem; max-width:720px; }
+  .like{ display:block; break-inside:avoid; position:relative; padding:.3rem 0 .3rem 1.5rem; line-height:1.4; font-size:1.02rem; }
+  .like::before{ content:"\2726"; position:absolute; left:0; top:.4em; font-size:.72em; color:var(--plum); }
+  .like:nth-child(2n)::before{ color:var(--green); }
+  @media (max-width:640px){ .likes{ columns:1; } }
+
+  /* ---------- Footer ---------- */
+  footer{ position:relative; padding-block:clamp(2.75rem,6vw,4.5rem) 3rem; }
+  .contact-h{ font-family:var(--font-display); font-weight:800; font-size:clamp(1.9rem,1.4rem+2.4vw,3.1rem); letter-spacing:-0.02em; line-height:1.06; margin-bottom:1.4rem; text-wrap:balance; }
+  .contact-links{ display:flex; flex-wrap:wrap; gap:.7rem; margin-bottom:2.5rem; }
+  .foot-meta{ font-family:var(--font-mono); font-size:.74rem; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; padding-top:1.5rem; border-top:2px dashed var(--line); }
+
+  /* ---------- Reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  a:focus-visible, .btn:focus-visible, .card:focus-visible{ outline:2px solid var(--green-deep); outline-offset:3px; border-radius:6px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; scroll-behavior:auto !important; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .avatar{ transform:rotate(-3deg); }
+    .avatar-badge .bi:first-child{ opacity:1; }
+    .btn:hover, .card:hover, .quest-log li:hover, nav.top a:hover{ transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a href="#top" class="brand">nicole<span style="color:var(--plum)">~</span></a>
+    <div class="site-right">
+      <nav class="top" aria-label="Primary">
+        <a href="#now">Now</a>
+        <a href="#work">Work</a>
+        <a href="#offscreen">Off the clock</a>
+        <a href="#care">Values</a>
+        <a href="#reading">Reading</a>
+        <a href="#likes">Likes</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="social">
+        <a class="ico" href="https://www.linkedin.com/in/nicoleabramowski/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        </a>
+        <a class="ico" href="https://github.com/nabramow" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.05.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.83.58C20.56 22.29 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="float f1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span>
+    <span class="float f2 green"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span>
+    <span class="float f3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span>
+    <div class="wrap">
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <!-- Replace this whole block with: <img src="photo.jpg" alt="Nicole Abramowski" /> -->
+          <div class="ph">your<br/>photo :)</div>
+        </div>
+        <span class="note-avatar">hi, it&rsquo;s me!
+          <span class="arrow"><svg viewBox="0 0 60 40" fill="none" aria-hidden="true"><path d="M56 8 C 30 0 8 12 6 34" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M6 34 L2 20 M6 34 L20 30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span>
+        </span>
+        <div class="avatar-badge" aria-hidden="true">
+          <span class="bi"><svg viewBox="0 0 24 24"><path d="M5 8h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V8Z"/><path d="M16 9h2.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 2.5c-.6.8-.6 1.5 0 2.3M11.5 2.5c-.6.8-.6 1.5 0 2.3"/></svg></span>
+          <span class="bi"><svg viewBox="0 0 24 24"><path d="M9 8l-4 4 4 4"/><path d="M15 8l4 4-4 4"/></svg></span>
+          <span class="bi"><svg viewBox="0 0 24 24"><path d="M21 3 3 10.5l6 2.5 2.5 6L21 3Z"/><path d="M9 13l3-3"/></svg></span>
+          <span class="bi"><svg viewBox="0 0 24 24"><path d="M12 6C9.5 4.7 6.5 4.7 4 5.3v12.5c2.5-.6 5.5-.6 8 1 2.5-1.6 5.5-1.6 8-1V5.3c-2.5-.6-5.5-.6-8 .7Z"/><path d="M12 6.7V19"/></svg></span>
+          <span class="bi"><svg viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span>
+        </div>
+      </div>
+      <h1 class="thesis">I build software that makes <span class="u">real life</span> better.</h1>
+      <p class="lede">Software engineer in London. I&rsquo;m on the core team of Couchers.org, and I&rsquo;m building you&nbsp;coming? It&rsquo;s an app for turning &ldquo;we should hang out&rdquo; into plans that actually happen. In my personal life I&rsquo;m a master of side quests, long walks listening to questionable music, and finding snacks. Figuring out the space between where I come from and where I&rsquo;m going, in perpetuum.</p>
+      <p class="meta">London, UK &nbsp;·&nbsp; UK Global Talent visa &nbsp;·&nbsp; US / EU (German) citizen &nbsp;·&nbsp; UK citizenship hopefully loading ~2031</p>
+      <div class="hero-links">
+        <a class="btn primary" href="#work">See my work</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+  <!-- NOW -->
+  <section id="now">
+    <div class="wrap row">
+      <div class="label"><span class="eyebrow">Now</span></div>
+      <div class="prose">
+        <h2>The short version</h2>
+        <p>Software engineer. I&rsquo;m on the core team at <a href="https://couchers.org" target="_blank" rel="noopener">Couchers.org</a>, a nonprofit couch-surfing platform, and the rest of my time goes to you coming?.</p>
+        <p>I also occasionally mentor new engineers through the <a href="https://ttp.nyc/web-development-fellowship" target="_blank" rel="noopener">NYC Tech Talent Pipeline x Codesmith</a>.</p>
+        <p>I&rsquo;ve got a UK Global Talent visa and US/EU (German) dual citizenship, so I can work across most borders without the sponsorship headache, which I&rsquo;m aware is the first thing half of you wanted to know.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="wrap row">
+      <div class="label"><span class="eyebrow">Selected work</span></div>
+      <div class="work">
+
+        <div class="card">
+          <div class="card-top">
+            <h3>you coming?</h3>
+            <span class="tag now"><span class="mini"></span>Now building</span>
+          </div>
+          <p class="card-hook">social media was supposed to help us hang out. building the app that actually does.</p>
+          <p class="prose"><span class="term">serendipitymaxxing</span> in app form: engineering more of the happy accidents that turn strangers into friends.</p>
+          <p class="prose">Born from moving to London and drowning in large WhatsApp communities and groups with zero actual plans. <a href="https://journals.sagepub.com/doi/10.1177/0265407518761225" target="_blank" rel="noopener">The research</a> is blunt: ~50 hours together makes casual friends, 200+ makes close ones, and scrolling doesn&rsquo;t count. you coming? turns &ldquo;we should hang out&rdquo; into plans that happen.</p>
+          <div class="shot-row phones">
+            <!-- Add or remove .shot blocks freely. Swap each .ph for an image, e.g. <img src="youcoming-1.png" alt="you coming? screenshot" /> -->
+            <div class="shot phone"><span class="ph">screen 1</span></div>
+            <div class="shot phone"><span class="ph">screen 2</span></div>
+            <div class="shot phone"><span class="ph">screen 3</span></div>
+            <div class="shot phone"><span class="ph">screen 4</span></div>
+          </div>
+          <div class="store-badges">
+            <!-- you coming? isn't live yet: replace href="#" with the real App Store / Google Play URLs at launch -->
+            <a class="badge" href="#" aria-label="Download you coming? on the App Store">
+              <svg width="18" height="20" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+              <span class="b-txt"><span class="b-small">Download on the</span><span class="b-big">App Store</span></span>
+            </a>
+            <a class="badge" href="#" aria-label="Get you coming? on Google Play">
+              <svg width="17" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3 L18 12 L4 21 Z"/></svg>
+              <span class="b-txt"><span class="b-small">Get it on</span><span class="b-big">Google Play</span></span>
+            </a>
+          </div>
+          <div class="stack">
+            <span class="chip">React&nbsp;Native</span><span class="chip">TypeScript</span><span class="chip">Node</span>
+          </div>
+          <a class="go-more" href="https://youcomingapp.com" target="_blank" rel="noopener">youcomingapp.com</a>
+        </div>
+
+        <div class="card">
+          <div class="card-top">
+            <h3>Couchers.org</h3>
+            <span class="tag role">Product Engineer · Core Leadership Team · Board</span>
+          </div>
+          <p class="prose">A non-transactional, nonprofit couch-surfing platform built by volunteers: community and cultural exchange instead of ads and engagement bait. I designed and built the core map search that 90k+ members use to find each other, and I keep a scattered volunteer team shipping. 501(c)(3), used worldwide, and fully <a href="https://github.com/Couchers-org/couchers" target="_blank" rel="noopener">open source</a>.</p>
+          <div class="shot-row phones">
+            <!-- Couchers app screenshots. Swap each .ph for an image, e.g. <img src="couchers-app-1.png" alt="Couchers app screenshot" /> -->
+            <div class="shot"><span class="ph">app 1</span></div>
+            <div class="shot"><span class="ph">app 2</span></div>
+            <div class="shot"><span class="ph">app 3</span></div>
+            <div class="shot"><span class="ph">app 4</span></div>
+            <div class="shot"><span class="ph">app 5</span></div>
+          </div>
+          <div class="store-badges">
+            <a class="badge" href="https://apps.apple.com/us/app/couchers-org/id6623776751" target="_blank" rel="noopener" aria-label="Download Couchers on the App Store">
+              <svg width="18" height="20" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+              <span class="b-txt"><span class="b-small">Download on the</span><span class="b-big">App Store</span></span>
+            </a>
+            <a class="badge" href="https://play.google.com/store/apps/details?id=org.couchers.android" target="_blank" rel="noopener" aria-label="Get Couchers on Google Play">
+              <svg width="17" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3 L18 12 L4 21 Z"/></svg>
+              <span class="b-txt"><span class="b-small">Get it on</span><span class="b-big">Google Play</span></span>
+            </a>
+          </div>
+          <div class="stack">
+            <span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Open source</span><span class="chip">Product direction</span>
+          </div>
+          <a class="go-more" href="https://couchers.org" target="_blank" rel="noopener">visit couchers.org</a>
+        </div>
+
+        <div class="prev">
+          <p class="eyebrow" style="margin-bottom:.5rem;">Previously</p>
+          <p class="prose">Before this: <strong>Articulate</strong>, where I wrote and scaled the localization API the whole product runs on, taking it from MVP to millions in ARR with plenty of Fortune 500 clients. And before that, <strong>Hopkins</strong>, a legaltech company making legal help more accessible.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+  <!-- OFF-SCREEN -->
+  <section id="offscreen">
+    <div class="wrap row">
+      <div class="label"><span class="eyebrow">Off the clock</span></div>
+      <div style="width:100%;">
+        <h2>Away from the keyboard</h2>
+        <div class="quests">
+          <div class="quest">
+            <div class="q-head">In the kitchen 🍜</div>
+            <p>Serious home cook, entirely plant-based, fermentation enthusiast, and culinary alchemist. In a former life I ran a food and travel blog, Vegan Nom Noms, that did decently well.</p>
+          </div>
+          <div class="quest">
+            <div class="q-head">On the move ✈</div>
+            <p>An occasional digital nomad. It&rsquo;s my ongoing goal to have the weirdest background on the Zoom call. Best so far? The jungle, from an outdoor treehouse in Cambodia.</p>
+          </div>
+          <div class="quest">
+            <div class="q-head">Beginner again 🤸</div>
+            <p>Reconnecting with everything I loved as a kid: acting classes, adult gymnastics, and dance class, where I reliably lose the choreography halfway through. Next scary goal: pick the violin and/or piano back up after a 20-year hiatus.</p>
+          </div>
+        </div>
+
+        <p class="eyebrow" style="margin:2.4rem 0 0;">Side quests, for the record</p>
+        <ul class="quest-log">
+          <li><span class="spark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span><span>Accidentally co-organized a fashion show in northern Thailand.</span></li>
+          <li><span class="spark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span><span>Ended up in a Febreze commercial after agreeing to be blindfolded and thrown in the back of a van in Berlin.</span></li>
+          <li><span class="spark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span><span>Worked on a ship in Antarctica. Outdoor experience beforehand? Zero.</span></li>
+        </ul>
+
+        <p class="eyebrow" style="margin:2.4rem 0 0;">Still on the list</p>
+        <ul class="quest-log todo">
+          <!-- Bucket list. Add or remove <li> freely. -->
+          <li><span class="check"></span><span>Finish the West Highland Way and walk the Camino.</span></li>
+          <li><span class="check"></span><span>Befriend the green parakeets of London.</span></li>
+          <li><span class="check"></span><span>Build a co-housing project with my friends (stretch goal).</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+  <!-- VALUES -->
+  <section id="care">
+    <div class="wrap row">
+      <div class="label"><span class="eyebrow">What I care about</span></div>
+      <div>
+        <ul class="care-list">
+          <li><span class="spark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span><span>Technology should give people back their time and attention, not compete for it. I want to build things that help you live your life, not pull you away from it.</span></li>
+          <li><span class="spark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span><span>I care a lot about who I build for. I want to work on things that make the world better, or at least aren&rsquo;t quietly making it worse: environmentally, socially, politically, all of it.</span></li>
+          <li><span class="spark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span><span>The stuff I genuinely care about: health, eco-friendliness, public transit, and anything that gets people together in real life.</span></li>
+          <li><span class="spark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1.2 6.6 4.2 9.6 12 12-7.8 2.4-10.8 5.4-12 12-1.2-6.6-4.2-9.6-12-12 7.8-2.4 10.8-5.4 12-12Z"/></svg></span><span>I&rsquo;m ambitious from 9 to 5, and I believe ambition can apply to your personal life too.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+  <!-- READING -->
+  <section id="reading">
+    <div class="wrap row">
+      <div class="label"><span class="eyebrow">Reading</span></div>
+      <div style="width:100%;">
+        <h2>Books I think are required for being human</h2>
+        <div class="book-covers">
+          <div class="cover">
+            <div class="cover-art"><span class="cover-fallback">You&rsquo;re Not Listening</span><img src="https://covers.openlibrary.org/b/isbn/9781250297198-L.jpg" alt="You're Not Listening by Kate Murphy" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="cover-cap"><span class="cover-title">You&rsquo;re Not Listening</span><span class="cover-by">Kate Murphy</span><span class="cover-note">What actually makes a good listener, from CIA agents to relationship specialists.</span></div>
+          </div>
+          <div class="cover">
+            <div class="cover-art"><span class="cover-fallback">Daring Greatly</span><img src="https://covers.openlibrary.org/b/isbn/9781592407330-L.jpg" alt="Daring Greatly by Brené Brown" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="cover-cap"><span class="cover-title">Daring Greatly</span><span class="cover-by">Bren&eacute; Brown</span><span class="cover-note">The &lsquo;vulnerability hangover&rsquo; changed my life.</span></div>
+          </div>
+          <div class="cover">
+            <div class="cover-art"><span class="cover-fallback">Moral Ambition</span><img src="https://covers.openlibrary.org/b/isbn/9781526685551-L.jpg" alt="Moral Ambition by Rutger Bregman" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="cover-cap"><span class="cover-title">Moral Ambition</span><span class="cover-by">Rutger Bregman</span><span class="cover-note">A case for pointing your talent at the world&rsquo;s biggest problems, not just a career.</span></div>
+          </div>
+        </div>
+
+        <p class="eyebrow" style="margin:2.4rem 0 1rem;">And required for fun</p>
+        <div class="book-covers">
+          <div class="cover">
+            <div class="cover-art"><span class="cover-fallback">Throne of Glass</span><img src="https://covers.openlibrary.org/b/isbn/9781619630345-L.jpg" alt="Throne of Glass by Sarah J. Maas" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="cover-cap"><span class="cover-title">Throne of Glass</span><span class="cover-by">Sarah J. Maas</span><span class="cover-note">The whole series. Assassins, court intrigue, zero regrets.</span></div>
+          </div>
+          <div class="cover">
+            <div class="cover-art"><span class="cover-fallback">Heated Rivalry</span><img src="https://covers.openlibrary.org/b/isbn/9781488051241-L.jpg" alt="Heated Rivalry by Rachel Reid" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="cover-cap"><span class="cover-title">Heated Rivalry</span><span class="cover-by">Rachel Reid</span><span class="cover-note">Enemies-to-lovers MM hockey romance. I really believe this book and its TV series are changing the world.</span></div>
+          </div>
+          <div class="cover">
+            <div class="cover-art"><span class="cover-fallback">Interview with the Vampire</span><img src="https://covers.openlibrary.org/b/isbn/9780345337665-L.jpg" alt="Interview with the Vampire by Anne Rice" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="cover-cap"><span class="cover-title">Interview with the Vampire</span><span class="cover-by">Anne Rice</span><span class="cover-note">Team Lestat. The books and the TV show.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+  <!-- LIKES -->
+  <section id="likes">
+    <div class="wrap row">
+      <div class="label"><span class="eyebrow">Likes</span></div>
+      <div style="width:100%;">
+        <h2>Random things I like, in flow-of-consciousness order</h2>
+        <div class="likes">
+          <span class="like">finding vegan pastries</span>
+          <span class="like">Ani DiFranco</span>
+          <span class="like">organizing things in containers</span>
+          <span class="like">when people approve my PRs with no comments</span>
+          <span class="like">bingeing sci-fi and fantasy shows</span>
+          <span class="like">river tubing</span>
+          <span class="like">walks in places that feel like I&rsquo;m in 1567</span>
+          <span class="like">fermenting kimchi, pickles, sourdough, or whatever&rsquo;s my current fixation</span>
+          <span class="like">dropping myself into a new country and figuring it out (my truest flow state)</span>
+          <span class="like">trip-hop</span>
+          <span class="like">videos of parrots causing havoc</span>
+          <span class="like">community-building</span>
+          <span class="like">meandering philosophical convos</span>
+          <span class="like">not having to leave the house before 10am</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+</main>
+
+<!-- CONTACT -->
+<footer id="contact">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:1rem;">Contact</p>
+    <h2 class="contact-h" style="margin-bottom:1.4rem;">Building something that gets people together, or just want to argue about why most social apps leave us lonelier? Let&rsquo;s talk.</h2>
+    <div class="contact-links">
+      <a class="btn primary" id="email-btn" href="#" rel="nofollow">Email me</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/nicoleabramowski/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost" href="https://github.com/nabramow" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn ghost" href="cv.pdf">Download CV</a>
+    </div>
+    <div class="foot-meta">
+      <span>&copy; <span id="yr"></span> Nicole Abramowski · London</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // --- Contact email, kept out of the page source to reduce spam harvesting ---
+  // Put your real address in two parts below (before and after the @):
+  var emailUser = "you";           // the part before the @
+  var emailDomain = "example.com"; // the part after the @
+  var emailBtn = document.getElementById('email-btn');
+  if (emailBtn) { emailBtn.href = "mailto:" + emailUser + "@" + emailDomain; }
+  const els = document.querySelectorAll('section, .card, .quest, .quest-log li, .care-list li');
+  els.forEach(el => el.classList.add('reveal'));
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
+    }, { threshold:0.12, rootMargin:'0px 0px -40px 0px' });
+    els.forEach(el=>io.observe(el));
+  } else { els.forEach(el=>el.classList.add('in')); }
+</script>
+</body>
+</html>
