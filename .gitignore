@@ -1,0 +1,8 @@
+# Private working notes — not for the public repo
+TODO.md
+
+# Node
+node_modules/
+
+# macOS
+.DS_Store
