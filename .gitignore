@@ -1,6 +1,10 @@
 # Private working notes — not for the public repo
 TODO.md
 
+# Never publish the CV: it contains a plaintext email address, visa status and
+# citizenship. Anything in this repo is publicly fetchable at the live site URL.
+*.pdf
+
 # Node
 node_modules/
 

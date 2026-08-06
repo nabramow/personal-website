@@ -12,7 +12,7 @@ connection): Google Fonts and the book cover images (from Open Library). If eith
 - `server.ts` — tiny local preview server (only used while developing)
 - `package.json` — just holds the `npm start` script
 - `README.md` — this file
-- Files you'll add yourself as you go: `photo.jpg`, app screenshots, `cv.pdf`
+- Files you'll add yourself as you go: `photo.jpg`, app screenshots
 
 ## View it locally
 
