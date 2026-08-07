@@ -14,6 +14,16 @@
 <link rel="canonical" href="https://nicoleabramowski.com/" />
 <meta name="robots" content="index, follow, noai, noimageai" />
 
+<!-- Runs before first paint so a saved theme choice never flashes the wrong
+     colours. Must stay up here in the document head, and must stay synchronous
+     (no defer, no async). -->
+<script>
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) { /* private mode can throw on localStorage; system preference still applies */ }
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Shantell+Sans:ital,wght@0,400;0,600;1,500&display=swap" rel="stylesheet" />
@@ -43,7 +53,57 @@
 
     /* hand-drawn wave used as an underline accent */
     --wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 12 2 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 118 7' fill='none' stroke='%238A3E6B' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+
+    /* light-background artwork needs no correction in light mode */
+    --img-dim: none;
+
+    /* ---- DARK PALETTE ----------------------------------------
+       Edit dark colours HERE and nowhere else. The two rules below
+       just point the names above at these values.
+       --green-deep and --plum-deep are foreground accents (links,
+       hovers, .term underlines), so in dark they are the LIGHTEST
+       tints rather than the darkest. */
+    --dark-ink:        #EDE9DF;   /* text + borders */
+    --dark-paper:      #141A17;   /* page background */
+    --dark-paper-2:    #1E2622;   /* raised surfaces: covers, phone frames */
+    --dark-green:      #35785A;   /* solid accent, dark enough for white text */
+    --dark-green-deep: #7FD3A4;   /* links, focus rings, checkboxes */
+    --dark-plum:       #C77CA6;   /* underlines, shadows, borders */
+    --dark-plum-deep:  #E3AFCC;   /* accent text + hovers */
+    --dark-muted:      #9CAAA1;
+    --dark-line:       #2C3831;
+    --dark-wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 12 2 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 118 7' fill='none' stroke='%23C77CA6' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+    /* screenshots and book covers are bright white; take the glare off */
+    --dark-img-dim: brightness(.88) contrast(1.02);
+
+    color-scheme: light dark;
   }
+
+  /* Dark applies in two situations, and both use the same values above.
+     1. the OS asks for dark and the reader hasn't overridden it
+     2. the reader picked dark with the header toggle */
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:var(--dark-ink); --paper:var(--dark-paper); --paper-2:var(--dark-paper-2);
+      --green:var(--dark-green); --green-deep:var(--dark-green-deep);
+      --plum:var(--dark-plum); --plum-deep:var(--dark-plum-deep);
+      --muted:var(--dark-muted); --line:var(--dark-line);
+      --wave:var(--dark-wave); --img-dim:var(--dark-img-dim);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:var(--dark-ink); --paper:var(--dark-paper); --paper-2:var(--dark-paper-2);
+    --green:var(--dark-green); --green-deep:var(--dark-green-deep);
+    --plum:var(--dark-plum); --plum-deep:var(--dark-plum-deep);
+    --muted:var(--dark-muted); --line:var(--dark-line);
+    --wave:var(--dark-wave); --img-dim:var(--dark-img-dim);
+  }
+  /* keep native UI (scrollbars, form controls) in step with an explicit choice */
+  :root[data-theme="dark"]{ color-scheme: dark; }
+  :root[data-theme="light"]{ color-scheme: light; }
+
+  .shot img, .cover-art img, .job-logo{ filter:var(--img-dim); }
+  .cover-link:hover .cover-art img, .shot img:hover{ filter:none; }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
   html{ scroll-behavior:smooth; }
@@ -79,12 +139,25 @@
   nav.top{ display:flex; gap:1.5rem; }
   nav.top a{ font-family:var(--font-body); font-size:.9rem; text-decoration:none; color:var(--muted); transition:color .18s ease, transform .18s ease; }
   nav.top a:hover, nav.top a:focus-visible{ color:var(--plum-deep); transform:rotate(-3deg); }
-  @media (max-width:640px){ nav.top{ display:none; } }
+  @media (max-width:640px){
+    nav.top{ display:none; }
+    /* "Nicole Abramowski~" in the hand font is ~200px; with the icon row that
+       overflows a 360px screen. Let the bar grow instead of forcing one line. */
+    .site .wrap{ height:auto; min-height:62px; padding-block:.55rem; gap:.75rem; }
+    .brand{ font-size:1.02rem; }
+    .social{ flex:0 0 auto; }
+  }
   .site-right{ display:flex; align-items:center; gap:1.4rem; }
   .social{ display:flex; align-items:center; gap:.85rem; }
   .ico{ display:inline-flex; color:var(--muted); transition:color .18s ease, transform .18s ease; }
   .ico:hover, .ico:focus-visible{ color:var(--plum-deep); transform:translateY(-2px) rotate(-4deg); }
   .ico svg{ width:20px; height:20px; display:block; fill:currentColor; }
+  /* theme toggle: same look as the social icons, but a real button.
+     Hidden until JS enables it so there's no dead control without JS. */
+  .theme-toggle{ background:none; border:0; padding:0; cursor:pointer; font:inherit; }
+  .theme-toggle[hidden]{ display:none; }
+  .theme-toggle svg{ transition:transform .3s ease; }
+  .theme-toggle:hover svg, .theme-toggle:focus-visible svg{ transform:rotate(25deg); }
 
   /* ---------- Hero ---------- */
   .hero{ position:relative; padding-block: clamp(2.75rem, 7vw, 5rem) clamp(2.5rem, 6vw, 4rem); overflow:hidden; }
@@ -162,8 +235,13 @@
 
   /* ---------- Section scaffold ---------- */
   section{ padding-block: clamp(2.5rem, 5.5vw, 4rem); }
-  .row{ display:grid; grid-template-columns: 200px 1fr; gap:clamp(1.25rem, 4vw, 3rem); align-items:start; }
-  @media (max-width:720px){ .row{ grid-template-columns:1fr; gap:1rem; } }
+  /* minmax(0,1fr) not 1fr: a bare 1fr floors at min-content, so wide children
+     (the scrolling phone-frame rows, the 2-column likes) would widen the whole
+     track and push the page into horizontal scroll. min-width:0 does the same
+     job for the grid items themselves. */
+  .row{ display:grid; grid-template-columns: 200px minmax(0, 1fr); gap:clamp(1.25rem, 4vw, 3rem); align-items:start; }
+  .row > *{ min-width:0; }
+  @media (max-width:720px){ .row{ grid-template-columns:minmax(0, 1fr); gap:1rem; } }
   .row .label{ position:sticky; top:78px; }
   @media (max-width:720px){ .row .label{ position:static; } }
 
@@ -184,7 +262,11 @@
   .term::after{ content:""; position:absolute; left:0; right:0; bottom:-.12em; height:.32em; background:var(--wave) no-repeat; background-size:100% 100%; }
 
   /* ---------- Work cards ---------- */
+  /* min-width:0 on the cards too, or their min-content (driven by the 5-across
+     .shot-row) makes each card wider than the page instead of letting the
+     screenshot row scroll inside it. */
   .work{ display:grid; gap:1.1rem; }
+  .work > *{ min-width:0; }
   .prev{ border-top:2px dashed var(--line); padding-top:1.3rem; margin-top:.2rem; }
   .card{
     display:block; text-decoration:none; color:inherit;
@@ -209,10 +291,28 @@
   .shot{ flex:0 0 auto; scroll-snap-align:start; border:2px solid var(--ink); border-radius:14px; overflow:hidden; background:var(--paper-2); display:flex; align-items:center; justify-content:center; }
   .shot .ph{ color:var(--muted); font-family:var(--font-mono); font-size:.64rem; text-align:center; padding:.6rem; line-height:1.5; }
   .shot img{ width:100%; height:100%; object-fit:cover; display:block; }
+  /* Scroll affordance: fade whichever edge still has content behind it, so it's
+     obvious the row scrolls. Masking rather than an overlay gradient means it
+     needs no background colour and so works in both themes untouched.
+     The .fade-* classes are toggled from JS based on scroll position. */
+  .shot-row{ --fade:28px; }
+  .shot-row.fade-right:not(.fade-left){
+    -webkit-mask-image:linear-gradient(to right, #000 calc(100% - var(--fade)), transparent 100%);
+            mask-image:linear-gradient(to right, #000 calc(100% - var(--fade)), transparent 100%);
+  }
+  .shot-row.fade-left:not(.fade-right){
+    -webkit-mask-image:linear-gradient(to right, transparent 0, #000 var(--fade));
+            mask-image:linear-gradient(to right, transparent 0, #000 var(--fade));
+  }
+  .shot-row.fade-left.fade-right{
+    -webkit-mask-image:linear-gradient(to right, transparent 0, #000 var(--fade), #000 calc(100% - var(--fade)), transparent 100%);
+            mask-image:linear-gradient(to right, transparent 0, #000 var(--fade), #000 calc(100% - var(--fade)), transparent 100%);
+  }
+
   .shot-row.phones .shot{ width:118px; aspect-ratio:480 / 1021; }
   .shot-row.web .shot{ width:86%; aspect-ratio:16 / 10; }
   .store-badges{ display:flex; flex-wrap:wrap; gap:.6rem; margin:1.1rem 0 .2rem; }
-  .badge{ display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; background:var(--ink); color:#fff; border-radius:11px; padding:.5rem .9rem; transition:transform .18s ease; }
+  .badge{ display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; background:var(--ink); color:var(--paper); border-radius:11px; padding:.5rem .9rem; transition:transform .18s ease; }
   .badge:hover, .badge:focus-visible{ transform:translateY(-2px) rotate(-1.5deg); }
   .badge svg{ flex:0 0 auto; }
   .badge .b-txt{ display:flex; flex-direction:column; line-height:1.1; }
@@ -305,7 +405,20 @@
   .like .jk{ opacity:.55; font-size:.92em; }
   .like::before{ content:"\2726"; position:absolute; left:0; top:.4em; font-size:.72em; color:var(--plum); }
   .like:nth-child(2n)::before{ color:var(--green); }
-  @media (max-width:640px){ .likes{ columns:1; } }
+  @media (max-width:640px){
+    .likes{ columns:1; }
+    /* text-wrap:balance evens out line lengths, which on a narrow screen leaves
+       short ragged lines that read as "the heading isn't using the width".
+       Note: the reset value is `wrap`, not `normal`, and this has to come after
+       the h1.thesis / .contact-h rules to win at equal specificity. */
+    h1.thesis, .contact-h{ text-wrap:wrap; }
+    /* both store badges on one line */
+    .store-badges{ gap:.4rem; flex-wrap:nowrap; }
+    .badge{ padding:.45rem .6rem; gap:.4rem; }
+    .badge svg{ width:15px; height:auto; flex:0 0 auto; }
+    .b-small{ font-size:.56rem; }
+    .b-big{ font-size:.82rem; }
+  }
 
   /* ---------- Footer ---------- */
   footer{ position:relative; padding-block:clamp(2.75rem,6vw,4.5rem) 3rem; }
@@ -318,6 +431,17 @@
   .reveal.in{ opacity:1; transform:none; }
 
   a:focus-visible, .btn:focus-visible, .card:focus-visible{ outline:2px solid var(--green-deep); outline-offset:3px; border-radius:6px; }
+
+  /* Mobile fixes that must come last to win at equal specificity. */
+  @media (max-width:640px){
+    /* .contact-h is declared further down than the earlier mobile block, so its
+       text-wrap:balance has to be reset here instead. */
+    .contact-h{ text-wrap:wrap; }
+    /* The three decorative sparkles are positioned in percentages, which clears
+       the text on a wide hero but lands on top of it once the hero is narrow and
+       tall. Measured at 390px: f2 sat over the lede, f3 over the meta line. */
+    .float{ display:none; }
+  }
 
   @media (prefers-reduced-motion: reduce){
     *{ animation:none !important; scroll-behavior:auto !important; }
@@ -340,11 +464,14 @@
         <a href="#writing">Writing &amp; podcasts</a>
         <a href="#care">Values</a>
         <a href="#offscreen">Off the clock</a>
-        <a href="#reading">Reading</a>
         <a href="#likes">Likes</a>
+        <a href="#reading">Reading</a>
         <a href="#contact">Contact</a>
       </nav>
       <div class="social">
+        <button class="ico theme-toggle" id="theme-toggle" type="button" hidden aria-label="Switch to dark theme">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17V3.5Z"/><circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
         <a class="ico" href="https://www.linkedin.com/in/nicoleabramowski/" target="_blank" rel="noopener" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
         </a>
@@ -380,7 +507,7 @@
         </div>
       </div>
       <h1 class="thesis">I build software that makes <span class="u">real life</span> better.</h1>
-      <p class="lede">Software engineer in London. I&rsquo;m on the core team of Couchers.org, and I&rsquo;m building <a href="https://youcomingapp.com/" target="_blank" rel="noopener">you&nbsp;coming?</a> It&rsquo;s an app for turning &ldquo;we should hang out&rdquo; into plans that actually happen. In my personal life I&rsquo;m a master of side quests, long walks listening to questionable music, and finding snacks. Thriving in the space between where I come from and where I&rsquo;m going, in perpetuum.</p>
+      <p class="lede">Software engineer in London. I&rsquo;m on the core team of Couchers.org, and I&rsquo;m building <strong>you&nbsp;coming?</strong> &mdash; an app for turning &ldquo;we should hang out&rdquo; into plans that actually happen. In my personal life I&rsquo;m a master of side quests, long walks listening to questionable music, and finding snacks. Thriving in the space between where I come from and where I&rsquo;m going.</p>
       <p class="meta">London, UK &nbsp;·&nbsp; UK Global Talent visa &nbsp;·&nbsp; US / EU (German) citizen &nbsp;·&nbsp; UK citizenship hopefully loading ~2031</p>
       <div class="hero-links">
         <a class="btn primary" href="#work">See my work</a>
@@ -397,7 +524,7 @@
       <div class="prose">
         <h2>The short version</h2>
         <p>Software engineer and community-building enthusiast. I&rsquo;m on the core team at <a href="https://couchers.org" target="_blank" rel="noopener">Couchers.org</a>, a nonprofit couch-surfing platform, and the rest of my time goes to <a href="https://youcomingapp.com" target="_blank" rel="noopener">you&nbsp;coming?</a></p>
-        <p>A loud proponent of remote work, and firmly <span class="term">anti-enshittification</span>: products shouldn&rsquo;t get worse for the people who depend on them just because they&rsquo;re too locked in to leave.</p>
+        <p>Sold on remote work, and firmly <span class="term">anti-enshittification</span>: products shouldn&rsquo;t get worse for the people who depend on them just because they&rsquo;re locked in.</p>
         <p>I also occasionally mentor new engineers through the <a href="https://ttp.nyc/web-development-fellowship" target="_blank" rel="noopener">NYC Tech Talent Pipeline x Codesmith</a>.</p>
         <p><a href="https://technation.io/global-talent-visa/" target="_blank" rel="noopener">UK Global Talent visa</a>, US/EU (German) dual citizenship. No sponsorship headache, which I&rsquo;m aware is the first thing half of you wanted to know.</p>
         <p>Localization and cross-cultural work aren&rsquo;t abstractions to me: 13 years in Berlin, fluent German.</p>
@@ -455,7 +582,7 @@
           </div>
           <p class="card-hook">no product manager, no designer. I work out the user flows, get the team bought in, then build them.</p>
           <p class="prose">A non-transactional, nonprofit couch-surfing platform built by volunteers: community and cultural exchange instead of ads and engagement bait. 501(c)(3), used worldwide, fully <a href="https://github.com/Couchers-org/couchers" target="_blank" rel="noopener">open source</a>.</p>
-          <p class="prose">I rebuilt the map search that ~100k members use to find each other, swapping tangled legacy state for a React-friendly map package and useReducer. And I shipped our iOS and Android app in React Native with Expo: 12k+ downloads so far, and mobile is now half of all visits. Both started as rough flows I sketched and took to the board and the community before writing code.</p>
+          <p class="prose">I rebuilt the map search that ~100k members use to find each other. And I shipped our iOS and Android app in React Native with Expo: 12k+ downloads so far, and mobile is now half of all traffic. Both started as rough flows I sketched and took to the team before writing code.</p>
           <p class="prose">I&rsquo;ve also cleared years of frontend tech debt, broken the worst components into pieces that can actually be tested, and set up ways of working that suit a volunteer team spread across timezones.</p>
           <div class="shot-row phones">
             <div class="shot"><img src="images/app-mobile-dashboard.png" alt="Couchers app home screen: find a host, plus community updates" loading="lazy"></div>
@@ -552,10 +679,10 @@
         <div class="quests">
           <div class="quest">
             <div class="q-head">In the kitchen 🍜</div>
-            <p>Serious home cook, entirely plant-based, fermentation enthusiast, and culinary alchemist. In a former life I ran a food and travel blog, Vegan Nom Noms, that did decently well.</p>
+            <p>Serious home cook, entirely plant-based, often fermenting something, and culinary alchemist. In a former life I ran a food and travel blog, Vegan Nom Noms, that did decently well.</p>
           </div>
           <div class="quest">
-            <div class="q-head">On the move ✈</div>
+            <div class="q-head">On the move ✈️</div>
             <p>An occasional digital nomad. It&rsquo;s my ongoing goal to have the weirdest background on the Zoom call. Best so far? The jungle, from an outdoor treehouse in Cambodia.</p>
           </div>
           <div class="quest">
@@ -578,6 +705,35 @@
           <li><span class="check"></span><span>Befriend the green parakeets of London.</span></li>
           <li><span class="check"></span><span>Build a co-housing project with my friends (stretch goal).</span></li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+
+  <!-- LIKES -->
+  <section id="likes">
+    <div class="wrap row">
+      <div class="label"><span class="eyebrow">Likes</span></div>
+      <div style="width:100%;">
+        <h2>Random things I like, in flow-of-consciousness order</h2>
+        <div class="likes">
+          <span class="like">bingeing sci-fi and fantasy shows</span>
+          <span class="like">when people approve my PRs with no comments <span class="jk">j/k I love growing ;-)</span></span>
+          <span class="like">Ani DiFranco</span>
+          <span class="like">organizing things in containers</span>
+          <span class="like">finding vegan pastries</span>
+          <span class="like">river tubing</span>
+          <span class="like">hammocks</span>
+          <span class="like">walks in places that feel like I&rsquo;m in 1782</span>
+          <span class="like">fermenting kimchi, pickles, sourdough, or whatever&rsquo;s my current fixation</span>
+          <span class="like">dropping myself into a new country and figuring it out <span class="jk">my truest flow state</span></span>
+          <span class="like">trip-hop</span>
+          <span class="like">videos of parrots causing havoc</span>
+          <span class="like">community-building</span>
+          <span class="like">meandering philosophical convos</span>
+          <span class="like">not having to leave the house before 10am</span>
+        </div>
       </div>
     </div>
   </section>
@@ -616,42 +772,13 @@
 
   <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
 
-  <!-- LIKES -->
-  <section id="likes">
-    <div class="wrap row">
-      <div class="label"><span class="eyebrow">Likes</span></div>
-      <div style="width:100%;">
-        <h2>Random things I like, in flow-of-consciousness order</h2>
-        <div class="likes">
-          <span class="like">bingeing sci-fi and fantasy shows</span>
-          <span class="like">when people approve my PRs with no comments <span class="jk">j/k I love growing ;-)</span></span>
-          <span class="like">Ani DiFranco</span>
-          <span class="like">organizing things in containers</span>
-          <span class="like">finding vegan pastries</span>
-          <span class="like">river tubing</span>
-          <span class="like">hammocks</span>
-          <span class="like">walks in places that feel like I&rsquo;m in 1782</span>
-          <span class="like">fermenting kimchi, pickles, sourdough, or whatever&rsquo;s my current fixation</span>
-          <span class="like">dropping myself into a new country and figuring it out <span class="jk">my truest flow state</span></span>
-          <span class="like">trip-hop</span>
-          <span class="like">videos of parrots causing havoc</span>
-          <span class="like">community-building</span>
-          <span class="like">meandering philosophical convos</span>
-          <span class="like">not having to leave the house before 10am</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="wrap"><span class="squig"><svg viewBox="0 0 1200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 Q 25 1 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
-
 </main>
 
 <!-- CONTACT -->
 <footer id="contact">
   <div class="wrap">
     <p class="eyebrow" style="margin-bottom:1rem;">Contact</p>
-    <h2 class="contact-h" style="margin-bottom:1.4rem;">Building something you think I&rsquo;d be a good fit for? Or just want to argue about the correct number of side quests? Let&rsquo;s talk.</h2>
+    <h2 class="contact-h" style="margin-bottom:1.4rem;">Building something you think I&rsquo;d be a good fit for? Want to be friends? Or just want to argue about the correct number of side quests? Let&rsquo;s talk.</h2>
     <div class="contact-links">
       <a class="btn primary" href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#110;&#97;&#98;&#114;&#97;&#109;&#111;&#119;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email me</a>
       <a class="btn ghost" href="https://www.linkedin.com/in/nicoleabramowski/" target="_blank" rel="noopener">LinkedIn</a>
@@ -665,6 +792,66 @@
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // --- Theme toggle -------------------------------------------------------
+  // No stored choice means "follow the OS", which is the default and needs no JS.
+  // Clicking stores an explicit choice that overrides the OS from then on.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function isDark() {
+      var chosen = root.dataset.theme;
+      return chosen ? chosen === 'dark' : systemDark.matches;
+    }
+    function relabel() {
+      var next = isDark() ? 'Switch to light theme' : 'Switch to dark theme';
+      btn.setAttribute('aria-label', next);
+      btn.setAttribute('title', next);
+    }
+
+    btn.hidden = false;   // JS works, so the control does something
+    relabel();
+
+    btn.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      relabel();
+    });
+
+    // Track the OS while the reader hasn't made an explicit choice.
+    systemDark.addEventListener('change', function () {
+      if (!root.dataset.theme) relabel();
+    });
+  })();
+
+  // --- Screenshot rows: fade whichever edge still has more to scroll ---------
+  // Touch devices hide scrollbars until you swipe, so without this there is no
+  // hint that the row scrolls at all.
+  (function () {
+    var rows = document.querySelectorAll('.shot-row');
+    if (!rows.length) return;
+
+    function update(row) {
+      var max = row.scrollWidth - row.clientWidth;
+      var scrollable = max > 2;                  // ignore sub-pixel rounding
+      row.classList.toggle('fade-left', scrollable && row.scrollLeft > 2);
+      row.classList.toggle('fade-right', scrollable && row.scrollLeft < max - 2);
+    }
+    function updateAll(){ rows.forEach(update); }
+
+    rows.forEach(function (row) {
+      update(row);
+      row.addEventListener('scroll', function () { update(row); }, { passive: true });
+      // Screenshots arriving late change scrollWidth, as does rotating the phone.
+      if (window.ResizeObserver) new ResizeObserver(function () { update(row); }).observe(row);
+    });
+    window.addEventListener('resize', updateAll, { passive: true });
+    window.addEventListener('load', updateAll);
+  })();
 
   const els = document.querySelectorAll('section, .card, .quest, .quest-log li, .care-list li');
   els.forEach(el => el.classList.add('reveal'));
