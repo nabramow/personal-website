@@ -1,48 +1,49 @@
-# Normal search engines are welcome (so people can find this site).
+Sitemap: https://nicoleabramowski.com/sitemap.xml
+
+# ---------------------------------------------------------------------------
+# Normal search engines are welcome, so people can find this site.
+# ---------------------------------------------------------------------------
 User-agent: *
 Allow: /
 
-# AI training / scraping crawlers: please stay out.
+# ---------------------------------------------------------------------------
+# AI TRAINING crawlers: blocked. Feel free to read this page, don't train on it.
+# ---------------------------------------------------------------------------
+
+# OpenAI — training
 User-agent: GPTBot
 Disallow: /
 
-User-agent: ChatGPT-User
-Disallow: /
-
-User-agent: OAI-SearchBot
-Disallow: /
-
+# Anthropic — training
 User-agent: ClaudeBot
 Disallow: /
 
-User-agent: anthropic-ai
-Disallow: /
-
-User-agent: Claude-Web
-Disallow: /
-
+# Google — Gemini/Vertex training only. Blocking this does NOT affect
+# Google Search ranking, which is governed by Googlebot.
 User-agent: Google-Extended
 Disallow: /
 
-User-agent: CCBot
-Disallow: /
-
-User-agent: PerplexityBot
-Disallow: /
-
+# Apple — training only. Plain "Applebot" (Siri/Spotlight search) stays allowed.
 User-agent: Applebot-Extended
 Disallow: /
 
+# Meta — training. Note "facebookexternalhit" is deliberately NOT blocked, or
+# link previews would stop working when the site is shared.
 User-agent: Meta-ExternalAgent
 Disallow: /
 
 User-agent: FacebookBot
 Disallow: /
 
-User-agent: Amazonbot
+# Common Crawl — a dataset most model builders train from
+User-agent: CCBot
 Disallow: /
 
+# Others that crawl for training or resale of scraped data
 User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
 Disallow: /
 
 User-agent: cohere-ai
@@ -51,8 +52,33 @@ Disallow: /
 User-agent: Diffbot
 Disallow: /
 
-User-agent: Omgilibot
-Disallow: /
-
 User-agent: ImagesiftBot
 Disallow: /
+
+# ---------------------------------------------------------------------------
+# AI SEARCH + USER-INITIATED fetches: allowed on purpose.
+# These are how someone asking an assistant "who is Nicole Abramowski?" gets
+# an answer from this page rather than from a stale third-party profile.
+# Verified against each vendor's own crawler docs, Aug 2026.
+# ---------------------------------------------------------------------------
+
+# OpenAI — ChatGPT search index, and pages fetched when a user asks
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic — Claude search index, and pages fetched when a user asks
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Perplexity — both agents; Perplexity states neither is used for training
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /

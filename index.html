@@ -8,10 +8,54 @@
 <meta property="og:title" content="Nicole Abramowski · Software Engineer" />
 <meta property="og:description" content="Software engineer in London. On the Couchers.org core team and building you coming? I make software that gets people together in real life." />
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="Nicole Abramowski" />
+<meta property="og:locale" content="en_GB" />
+
+<!-- Browser chrome colour, matched to each theme's page background. -->
+<meta name="theme-color" content="#F5F2EA" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#141A17" media="(prefers-color-scheme: dark)" />
 <meta property="og:url" content="https://nicoleabramowski.com/" />
 <meta property="og:image" content="https://nicoleabramowski.com/images/me_avatar.jpg" />
 <meta property="og:image:alt" content="Nicole Abramowski, mid-jump in Glencoe, Scotland" />
 <link rel="canonical" href="https://nicoleabramowski.com/" />
+
+<!-- Favicon: the same sparkle used for the eyebrow bullets. SVG first for crisp
+     scaling; the PNG covers older browsers and the iOS home screen. Paths are
+     relative so they work at the domain root and on nabramow.github.io alike. -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="apple-touch-icon.png" sizes="180x180" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+<!-- Structured data: tells search engines this page is a person, and ties it to
+     the LinkedIn/GitHub profiles so they're understood as the same identity.
+     Deliberately no email here: schema.org supports it, but publishing it as
+     machine-readable JSON would undo the entity-encoding in the contact link. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Nicole Abramowski",
+  "url": "https://nicoleabramowski.com/",
+  "image": "https://nicoleabramowski.com/images/me_avatar.jpg",
+  "jobTitle": "Software Engineer",
+  "description": "Full-stack software engineer in London. Core team at Couchers.org and building you coming?",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "London",
+    "addressCountry": "GB"
+  },
+  "knowsLanguage": ["en", "de"],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Couchers.org",
+    "url": "https://couchers.org"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/nicoleabramowski/",
+    "https://github.com/nabramow"
+  ]
+}
+</script>
 <meta name="robots" content="index, follow, noai, noimageai" />
 
 <!-- Runs before first paint so a saved theme choice never flashes the wrong
@@ -247,7 +291,7 @@
 
   h2{
     font-family:var(--font-display); font-weight:700;
-    font-size:clamp(1.5rem,1.2rem+1vw,2rem); letter-spacing:-0.01em;
+    font-size:clamp(1.5rem,1.2rem + 1vw,2rem); letter-spacing:-0.01em;
     line-height:1.1; margin-bottom:1rem;
   }
   h2::after{ content:""; display:block; width:70px; height:9px; margin-top:.4rem; background:var(--wave) no-repeat; background-size:100% 100%; }
@@ -278,7 +322,7 @@
   .card:hover, .card:focus-visible{ transform:rotate(-.7deg) translate(-2px,-3px); box-shadow:7px 8px 0 color-mix(in srgb,var(--green) 42%, var(--paper)); }
   .card-top{ display:flex; align-items:center; gap:.7rem; margin-bottom:.7rem; flex-wrap:wrap; }
   .card h3{ font-family:var(--font-display); font-weight:700; font-size:1.3rem; letter-spacing:-0.01em; }
-  .card-hook{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.05rem,1rem+0.4vw,1.24rem); line-height:1.18; letter-spacing:-0.01em; margin-bottom:.85rem; color:var(--ink); }
+  .card-hook{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.05rem,1rem + 0.4vw,1.24rem); line-height:1.18; letter-spacing:-0.01em; margin-bottom:.85rem; color:var(--ink); }
   .tag{ font-family:var(--font-mono); font-size:.68rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:.3rem .65rem; border-radius:999px; display:inline-flex; align-items:center; gap:.4rem; border:1.5px solid var(--ink); }
   .tag.now{ background:color-mix(in srgb,var(--green) 16%, var(--paper)); color:var(--green-deep); transform:rotate(2deg); }
   .tag.now .mini{ width:7px; height:7px; border-radius:50%; background:var(--green); }
@@ -309,7 +353,46 @@
             mask-image:linear-gradient(to right, transparent 0, #000 var(--fade), #000 calc(100% - var(--fade)), transparent 100%);
   }
 
-  .shot-row.phones .shot{ width:118px; aspect-ratio:480 / 1021; }
+  /* These are the store images, captions included, so the frame matches the full
+     image ratio (both sets are ~0.461) rather than the bare screen. */
+  .shot-row.phones .shot{ width:150px; aspect-ratio:72 / 156; }
+  a.shot{ cursor:zoom-in; transition:transform .18s ease; }
+  a.shot:hover, a.shot:focus-visible{ transform:translateY(-3px); }
+
+  /* Click-to-enlarge viewer. The thumbnails are plain links to the image, so
+     with JS off they still open full size; JS upgrades that to a dialog. */
+  /* Full-viewport so the image centres against the screen rather than the dialog
+     shrink-wrapping to its content (which left it hugging the left edge). */
+  dialog.viewer{
+    width:100vw; max-width:100vw; height:100dvh; max-height:100dvh;
+    margin:0; border:0; padding:0; background:transparent; overflow:visible;
+  }
+  dialog.viewer::backdrop{ background:rgba(8,12,10,.78); }
+  .viewer-inner{ width:100%; height:100%; overflow:auto; -webkit-overflow-scrolling:touch; display:grid; place-items:center; padding:1rem; }
+  .viewer-inner img{ display:block; width:auto; max-width:min(90vw, 360px); height:auto; border-radius:14px; border:2px solid var(--ink); }
+  .viewer-close, .viewer-nav{
+    position:fixed; width:42px; height:42px; border-radius:50%;
+    border:2px solid var(--ink); background:var(--paper); color:var(--ink);
+    font:600 1.15rem/1 var(--font-body); cursor:pointer; display:grid; place-items:center;
+    transition:transform .16s ease, background .16s ease;
+  }
+  .viewer-close:hover, .viewer-nav:hover{ background:var(--paper-2); transform:scale(1.08); }
+  .viewer-close{ top:.75rem; right:.85rem; }
+  .viewer-nav{ top:50%; margin-top:-21px; }
+  .viewer-prev{ left:.6rem; }
+  .viewer-next{ right:.6rem; }
+  .viewer-count{
+    position:fixed; bottom:1rem; left:50%; transform:translateX(-50%);
+    font:500 .78rem/1 var(--font-body); letter-spacing:.04em;
+    color:var(--paper); background:rgba(8,12,10,.6); padding:.34rem .7rem; border-radius:99px;
+  }
+  /* On narrow screens pull the image in and the arrows out, so the arrows sit
+     beside the screenshot instead of covering its edge. */
+  @media (max-width:420px){
+    .viewer-inner img{ max-width:70vw; }
+    .viewer-prev{ left:.3rem; }
+    .viewer-next{ right:.3rem; }
+  }
   .shot-row.web .shot{ width:86%; aspect-ratio:16 / 10; }
   .store-badges{ display:flex; flex-wrap:wrap; gap:.6rem; margin:1.1rem 0 .2rem; }
   .badge{ display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; background:var(--ink); color:var(--paper); border-radius:11px; padding:.5rem .9rem; transition:transform .18s ease; }
@@ -357,7 +440,7 @@
 
   /* ---------- Values ---------- */
   .care-list{ list-style:none; display:grid; gap:1rem; max-width:62ch; }
-  .care-list li{ display:grid; grid-template-columns:auto 1fr; gap:.85rem; align-items:start; font-size:clamp(1.05rem,1rem+0.4vw,1.22rem); line-height:1.45; }
+  .care-list li{ display:grid; grid-template-columns:auto 1fr; gap:.85rem; align-items:start; font-size:clamp(1.05rem,1rem + 0.4vw,1.22rem); line-height:1.45; }
   .care-list .spark{ width:20px; height:20px; margin-top:.2em; }
   .care-list li:nth-child(2n) .spark{ color:var(--green); }
   .books{ list-style:none; display:grid; gap:1.1rem; max-width:62ch; }
@@ -422,7 +505,7 @@
 
   /* ---------- Footer ---------- */
   footer{ position:relative; padding-block:clamp(2.75rem,6vw,4.5rem) 3rem; }
-  .contact-h{ font-family:var(--font-display); font-weight:800; font-size:clamp(1.9rem,1.4rem+2.4vw,3.1rem); letter-spacing:-0.02em; line-height:1.06; margin-bottom:1.4rem; text-wrap:balance; }
+  .contact-h{ font-family:var(--font-display); font-weight:800; font-size:clamp(1.9rem,1.4rem + 2.4vw,3.1rem); letter-spacing:-0.02em; line-height:1.06; margin-bottom:1.4rem; text-wrap:balance; }
   .contact-links{ display:flex; flex-wrap:wrap; gap:.7rem; margin-bottom:2.5rem; }
   .foot-meta{ font-family:var(--font-mono); font-size:.74rem; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; padding-top:1.5rem; border-top:2px dashed var(--line); }
 
@@ -507,7 +590,7 @@
         </div>
       </div>
       <h1 class="thesis">I build software that makes <span class="u">real life</span> better.</h1>
-      <p class="lede">Software engineer in London. I&rsquo;m on the core team of Couchers.org, and I&rsquo;m building <strong>you&nbsp;coming?</strong> &mdash; an app for turning &ldquo;we should hang out&rdquo; into plans that actually happen. In my personal life I&rsquo;m a master of side quests, long walks listening to questionable music, and finding snacks. Thriving in the space between where I come from and where I&rsquo;m going.</p>
+      <p class="lede">Software engineer in London. Good at bringing fuzzy ideas to life. I&rsquo;m on the core team of Couchers.org, and I&rsquo;m building <strong>you&nbsp;coming?</strong> &mdash; an app for turning &ldquo;we should hang out&rdquo; into plans that actually happen. In my personal life I&rsquo;m a master of side quests, long walks listening to questionable music, and finding snacks. Thriving in the space between where I come from and where I&rsquo;m going.</p>
       <p class="meta">London, UK &nbsp;·&nbsp; UK Global Talent visa &nbsp;·&nbsp; US / EU (German) citizen &nbsp;·&nbsp; UK citizenship hopefully loading ~2031</p>
       <div class="hero-links">
         <a class="btn primary" href="#work">See my work</a>
@@ -524,6 +607,7 @@
       <div class="prose">
         <h2>The short version</h2>
         <p>Software engineer and community-building enthusiast. I&rsquo;m on the core team at <a href="https://couchers.org" target="_blank" rel="noopener">Couchers.org</a>, a nonprofit couch-surfing platform, and the rest of my time goes to <a href="https://youcomingapp.com" target="_blank" rel="noopener">you&nbsp;coming?</a></p>
+        <p>Full-stack web by trade, recently thrown into mobile and enjoying it.</p>
         <p>Sold on remote work, and firmly <span class="term">anti-enshittification</span>: products shouldn&rsquo;t get worse for the people who depend on them just because they&rsquo;re locked in.</p>
         <p>I also occasionally mentor new engineers through the <a href="https://ttp.nyc/web-development-fellowship" target="_blank" rel="noopener">NYC Tech Talent Pipeline x Codesmith</a>.</p>
         <p><a href="https://technation.io/global-talent-visa/" target="_blank" rel="noopener">UK Global Talent visa</a>, US/EU (German) dual citizenship. No sponsorship headache, which I&rsquo;m aware is the first thing half of you wanted to know.</p>
@@ -537,7 +621,7 @@
   <!-- WORK -->
   <section id="work">
     <div class="wrap row">
-      <div class="label"><span class="eyebrow">Selected work</span></div>
+      <div class="label"><span class="eyebrow">My technical babies</span></div>
       <div class="work">
 
         <div class="card">
@@ -545,15 +629,15 @@
             <h3>you coming?</h3>
             <span class="tag now"><span class="mini"></span>Coming soon</span>
           </div>
-          <p class="card-hook">social media was supposed to help us hang out. building the app that actually does.</p>
+          <p class="card-hook">Social media was supposed to help us hang out. you&nbsp;coming? actually does.</p>
           <p class="prose"><span class="term">serendipitymaxxing</span> in app form: engineering more of the happy accidents that turn strangers into friends.</p>
           <p class="prose">Born from moving to London and trying to build community in chatty WhatsApp groups where the actual plans kept getting drowned out. <a href="https://journals.sagepub.com/doi/10.1177/0265407518761225" target="_blank" rel="noopener">Research</a> is clear: ~50 hours together makes casual friends, 200+ makes close ones, and scrolling doesn&rsquo;t count. you coming? turns &ldquo;we should hang out&rdquo; into plans that happen.</p>
           <div class="shot-row phones">
-            <!-- Add or remove .shot blocks freely. Swap each .ph for an image, e.g. <img src="youcoming-1.png" alt="you coming? screenshot" /> -->
-            <div class="shot phone"><span class="ph">screen 1</span></div>
-            <div class="shot phone"><span class="ph">screen 2</span></div>
-            <div class="shot phone"><span class="ph">screen 3</span></div>
-            <div class="shot phone"><span class="ph">screen 4</span></div>
+            <a class="shot" href="images/yc-01-feed.jpg"><img src="images/yc-01-feed.jpg" alt="you coming? feed: throw an idea out there, see what sticks" loading="lazy"></a>
+            <a class="shot" href="images/yc-02-share.jpg"><img src="images/yc-02-share.jpg" alt="you coming? sharing: send a link, friends reply without downloading" loading="lazy"></a>
+            <a class="shot" href="images/yc-03-poll.jpg"><img src="images/yc-03-poll.jpg" alt="you coming? time poll: everyone ticks what works, no back-and-forth" loading="lazy"></a>
+            <a class="shot" href="images/yc-04-profile.jpg"><img src="images/yc-04-profile.jpg" alt="you coming? profile: a hangout bucket list instead of a follower count" loading="lazy"></a>
+            <a class="shot" href="images/yc-05-travel.jpg"><img src="images/yc-05-travel.jpg" alt="you coming? travel: say you&rsquo;re in town and let friends come to you" loading="lazy"></a>
           </div>
           <!-- Store badges hidden until you coming? launches. To restore, delete this
                comment wrapper and put the real store URLs in the two href="#" values. -->
@@ -585,11 +669,11 @@
           <p class="prose">I rebuilt the map search that ~100k members use to find each other. And I shipped our iOS and Android app in React Native with Expo: 12k+ downloads so far, and mobile is now half of all traffic. Both started as rough flows I sketched and took to the team before writing code.</p>
           <p class="prose">I&rsquo;ve also cleared years of frontend tech debt, broken the worst components into pieces that can actually be tested, and set up ways of working that suit a volunteer team spread across timezones.</p>
           <div class="shot-row phones">
-            <div class="shot"><img src="images/app-mobile-dashboard.png" alt="Couchers app home screen: find a host, plus community updates" loading="lazy"></div>
-            <div class="shot"><img src="images/app-mobile-search.png" alt="Couchers map search showing hosts around Berlin" loading="lazy"></div>
-            <div class="shot"><img src="images/app-mobile-messages.png" alt="Couchers messages screen with surf requests" loading="lazy"></div>
-            <div class="shot"><img src="images/app-mobile-badges.png" alt="Couchers badges screen explaining member verification" loading="lazy"></div>
-            <div class="shot"><img src="images/app-mobile-community.png" alt="Couchers New York City community page with local events" loading="lazy"></div>
+            <a class="shot" href="images/couchers-dashboard.jpg"><img src="images/couchers-dashboard.jpg" alt="Couchers home screen: connect, explore, belong" loading="lazy"></a>
+            <a class="shot" href="images/couchers-search.jpg"><img src="images/couchers-search.jpg" alt="Couchers map search: stay with locals or welcome travellers" loading="lazy"></a>
+            <a class="shot" href="images/couchers-messages.jpg"><img src="images/couchers-messages.jpg" alt="Couchers messages: meet people and build meaningful connections" loading="lazy"></a>
+            <a class="shot" href="images/couchers-badges.jpg"><img src="images/couchers-badges.jpg" alt="Couchers badges: feel safe and supported" loading="lazy"></a>
+            <a class="shot" href="images/couchers-community.jpg"><img src="images/couchers-community.jpg" alt="Couchers communities: explore your local community" loading="lazy"></a>
           </div>
           <div class="store-badges">
             <a class="badge" href="https://apps.apple.com/us/app/couchers-org/id6623776751" target="_blank" rel="noopener" aria-label="Download Couchers on the App Store">
@@ -608,10 +692,14 @@
         </div>
 
         <div class="prev">
-          <p class="eyebrow" style="margin-bottom:.5rem;">Previously</p>
-          <p class="prose"><img class="job-logo" src="images/articulate-icon.png" alt="" width="19" height="19" loading="lazy"><strong><a href="https://www.articulate.com/" target="_blank" rel="noopener">Articulate</a></strong>, the e-learning platform 125k organizations use for workplace training. I designed and built the glossary infrastructure that keeps brand-critical terms translated consistently at scale, one customers name in their case studies, plus the proof of concept for the localization API that now powers in-house translation for Fortune 100 clients.</p>
+          <p class="eyebrow" style="margin-bottom:.5rem;">Impressive things I did at rad companies for cash monies</p>
+          <p class="prose"><img class="job-logo" src="images/articulate-icon.png" alt="" width="19" height="19" loading="lazy"><strong><a href="https://www.articulate.com/" target="_blank" rel="noopener">Articulate</a></strong>, the e-learning platform 125k organizations use for workplace training, including every company in the Fortune 100. I designed and built the glossary infrastructure that keeps brand-critical terms translated consistently at scale, one customers name in their case studies, plus the proof of concept for the localization API that now powers their in-house translation.</p>
           <p class="prose"><img class="job-logo" src="images/hopkins-icon.png" alt="" width="19" height="19" loading="lazy"><strong><a href="https://www.hopkins.systems/" target="_blank" rel="noopener">Hopkins</a></strong>, legaltech making legal help more accessible, where I was the second full-time engineer hired. I built the client portal thousands of people use to follow their own cases, and the permissions system that let the company take on partner lawyers and legal insurers. The product is now a SaaS in its own right, <a href="https://www.caseflow.de/" target="_blank" rel="noopener">Caseflow</a>, and Hopkins went on to make the Financial Times&rsquo; list of <a href="https://rankings.statista.com/en/fastest-growing-companies/rankings/fastest-growing-companies-europe-2026" target="_blank" rel="noopener">Europe&rsquo;s fastest-growing companies for 2026</a>.</p>
-          <p class="prose"><strong>Self-employed work:</strong> I&rsquo;ve always run something of my own alongside the day job. Custom systems for creative entrepreneurs and small teams like <a href="https://www.mirakadavies.co.nz/" target="_blank" rel="noopener">Miraka Davies</a>, <a href="https://www.belindathomasinc.com/" target="_blank" rel="noopener">Belinda Thomas</a>, <a href="https://www.speakingsavvy.com.au/" target="_blank" rel="noopener">Lisa Evans</a>, <a href="https://www.snyderstrategies.me/" target="_blank" rel="noopener">Bethany Snyder</a>, and <a href="https://www.spacetoco.com/" target="_blank" rel="noopener">SpacetoCo</a>, who went on to land a deal on <a href="https://startupnews.com.au/news/spacetoco-went-swimming-with-sharks-and-survived/" target="_blank" rel="noopener">Shark Tank Australia</a>. I automated the processes they were doing by hand, built their online courses, sales funnels and landing pages, and designed each one so they could run it themselves.</p>
+          </div>
+
+          <div class="prev">
+            <p class="eyebrow" style="margin-bottom:.5rem;">And badass people I worked with solo, in my pyjamas, also for cash monies</p>
+            <p class="prose">I&rsquo;ve always run something of my own alongside the day job. Custom systems for creative entrepreneurs and small teams like <a href="https://www.mirakadavies.co.nz/" target="_blank" rel="noopener">Miraka Davies</a>, <a href="https://www.belindathomasinc.com/" target="_blank" rel="noopener">Belinda Thomas</a>, <a href="https://www.speakingsavvy.com.au/" target="_blank" rel="noopener">Lisa Evans</a>, <a href="https://www.snyderstrategies.me/" target="_blank" rel="noopener">Bethany Snyder</a>, and <a href="https://www.spacetoco.com/" target="_blank" rel="noopener">SpacetoCo</a>, who went on to land a deal on <a href="https://startupnews.com.au/news/spacetoco-went-swimming-with-sharks-and-survived/" target="_blank" rel="noopener">Shark Tank Australia</a>. I automated the processes they were doing by hand, built their online courses, sales funnels and landing pages, and designed each one so they could run it themselves.</p>
         </div>
 
       </div>
@@ -778,7 +866,7 @@
 <footer id="contact">
   <div class="wrap">
     <p class="eyebrow" style="margin-bottom:1rem;">Contact</p>
-    <h2 class="contact-h" style="margin-bottom:1.4rem;">Building something you think I&rsquo;d be a good fit for? Want to be friends? Or just want to argue about the correct number of side quests? Let&rsquo;s talk.</h2>
+    <h2 class="contact-h" style="margin-bottom:1.4rem;">Building something you think I&rsquo;d be a good fit for? Got an offer for my next side quest? Want to be friends? Let&rsquo;s talk.</h2>
     <div class="contact-links">
       <a class="btn primary" href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#110;&#97;&#98;&#114;&#97;&#109;&#111;&#119;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email me</a>
       <a class="btn ghost" href="https://www.linkedin.com/in/nicoleabramowski/" target="_blank" rel="noopener">LinkedIn</a>
@@ -789,6 +877,15 @@
     </div>
   </div>
 </footer>
+
+<!-- Enlarged screenshot viewer. Empty until a thumbnail is clicked. -->
+<dialog class="viewer" id="shot-viewer" aria-label="Enlarged screenshot">
+  <button class="viewer-close" type="button" aria-label="Close">&times;</button>
+  <button class="viewer-nav viewer-prev" type="button" aria-label="Previous screenshot">&#8249;</button>
+  <button class="viewer-nav viewer-next" type="button" aria-label="Next screenshot">&#8250;</button>
+  <div class="viewer-inner"><img alt="" /></div>
+  <p class="viewer-count" aria-live="polite"></p>
+</dialog>
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
@@ -851,6 +948,70 @@
     });
     window.addEventListener('resize', updateAll, { passive: true });
     window.addEventListener('load', updateAll);
+  })();
+
+  // --- Screenshot viewer ------------------------------------------------------
+  // Thumbnails are ordinary links to the full image, so with JS off (or in a
+  // browser without modal dialog support) clicking still opens it. Here we
+  // upgrade that to a modal you can page through with arrows or arrow keys.
+  (function () {
+    var dlg = document.getElementById('shot-viewer');
+    var links = document.querySelectorAll('a.shot');
+    if (!dlg || typeof dlg.showModal !== 'function' || !links.length) return;
+
+    var img   = dlg.querySelector('.viewer-inner img');
+    var inner = dlg.querySelector('.viewer-inner');
+    var count = dlg.querySelector('.viewer-count');
+    var prevBtn = dlg.querySelector('.viewer-prev');
+    var nextBtn = dlg.querySelector('.viewer-next');
+    var group = [];   // the links in whichever row was clicked
+    var index = 0;
+
+    function show(i) {
+      index = (i + group.length) % group.length;      // wraps at both ends
+      var a = group[index];
+      var thumb = a.querySelector('img');
+      img.src = a.getAttribute('href');
+      img.alt = thumb ? thumb.alt : '';
+      count.textContent = (index + 1) + ' / ' + group.length;
+      inner.scrollTop = 0;
+      // Warm the neighbours so paging feels instant.
+      [index + 1, index - 1].forEach(function (n) {
+        var nb = group[(n + group.length) % group.length];
+        if (nb) { var pre = new Image(); pre.src = nb.getAttribute('href'); }
+      });
+    }
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        // Leave modified clicks alone so "open in new tab" still works.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        // Page within the row that was clicked, so the two projects stay separate.
+        var row = a.closest('.shot-row') || document;
+        group = Array.prototype.slice.call(row.querySelectorAll('a.shot'));
+        var only = group.length < 2;
+        prevBtn.hidden = nextBtn.hidden = only;
+        count.hidden = only;
+        show(group.indexOf(a));
+        dlg.showModal();
+      });
+    });
+
+    prevBtn.addEventListener('click', function (e) { e.stopPropagation(); show(index - 1); });
+    nextBtn.addEventListener('click', function (e) { e.stopPropagation(); show(index + 1); });
+    dlg.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); show(index - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
+    });
+
+    // Click the backdrop or the padding around the image to dismiss.
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg || e.target === inner) dlg.close();
+    });
+    dlg.querySelector('.viewer-close').addEventListener('click', function () { dlg.close(); });
+    // Drop the src on close so a stale image never flashes on the next open.
+    dlg.addEventListener('close', function () { img.removeAttribute('src'); });
   })();
 
   const els = document.querySelectorAll('section, .card, .quest, .quest-log li, .care-list li');
