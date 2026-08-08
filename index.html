@@ -363,23 +363,30 @@
      with JS off they still open full size; JS upgrades that to a dialog. */
   /* Full-viewport so the image centres against the screen rather than the dialog
      shrink-wrapping to its content (which left it hugging the left edge). */
+  /* position:fixed + inset:0 makes the dialog itself the containing block, so the
+     controls below can use position:absolute. Fixed-position children inside a
+     top-layer <dialog> mis-hit-test on iOS Safari, which left the buttons visible
+     but untappable. */
   dialog.viewer{
+    position:fixed; inset:0;
     width:100vw; max-width:100vw; height:100dvh; max-height:100dvh;
     margin:0; border:0; padding:0; background:transparent; overflow:visible;
   }
   dialog.viewer::backdrop{ background:rgba(8,12,10,.78); }
-  .viewer-inner{ width:100%; height:100%; overflow:auto; -webkit-overflow-scrolling:touch; display:grid; place-items:center; padding:1rem; }
+  /* No -webkit-overflow-scrolling:touch here: it's legacy (iOS has had momentum
+     scrolling natively for years) and it swallows taps aimed at overlaid controls. */
+  .viewer-inner{ position:absolute; inset:0; z-index:1; overflow:auto; display:grid; place-items:center; padding:1rem; }
   .viewer-inner img{ display:block; width:auto; max-width:min(90vw, 360px); height:auto; border-radius:14px; border:2px solid var(--ink); }
-  /* 48px, not 42: 44px is the minimum comfortable touch target, and a tap that
-     lands just off a button gets its click retargeted to the dialog, which used
-     to read as "dismiss". touch-action stops the double-tap-zoom delay too. */
   .viewer-close, .viewer-nav{
-    position:fixed; width:48px; height:48px; border-radius:50%;
+    position:absolute; z-index:2; width:48px; height:48px; border-radius:50%;
     border:2px solid var(--ink); background:var(--paper); color:var(--ink);
     font:600 1.25rem/1 var(--font-body); cursor:pointer; display:grid; place-items:center;
     transition:transform .16s ease, background .16s ease;
     touch-action:manipulation; -webkit-tap-highlight-color:transparent;
   }
+  /* Invisible 12px collar so a near-miss still lands ON the button. Better than
+     guessing intent from coordinates, which could block closing altogether. */
+  .viewer-close::after, .viewer-nav::after{ content:""; position:absolute; inset:-12px; border-radius:50%; }
   .viewer-close:hover, .viewer-nav:hover{ background:var(--paper-2); transform:scale(1.08); }
   .viewer-close:active, .viewer-nav:active{ transform:scale(.94); background:var(--paper-2); }
   .viewer-close{ top:.75rem; right:.85rem; }
@@ -387,7 +394,7 @@
   .viewer-prev{ left:.6rem; }
   .viewer-next{ right:.6rem; }
   .viewer-count{
-    position:fixed; bottom:1rem; left:50%; transform:translateX(-50%);
+    position:absolute; z-index:2; bottom:1rem; left:50%; transform:translateX(-50%);
     font:500 .78rem/1 var(--font-body); letter-spacing:.04em;
     color:var(--paper); background:rgba(8,12,10,.6); padding:.34rem .7rem; border-radius:99px;
   }
@@ -1010,23 +1017,12 @@
       if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
     });
 
-    // Tap outside the image to dismiss. Deliberately checked by COORDINATES, not
-    // by e.target: on a touchscreen a finger that shifts slightly between
-    // touchstart and touchend gets its click retargeted to the nearest common
-    // ancestor (the dialog), so a near-miss on an arrow used to close the viewer
-    // instead of paging. Padding each control's hit box forgives those near-misses.
+    // Anything that isn't the image or a control dismisses. Deliberately NO
+    // "was the tap near a button" guard: if a tap ever fails to reach a button,
+    // that guard would swallow the dismiss too and trap the reader in the viewer.
+    // Near-misses are handled in CSS instead, by the ::after collar on each button.
     dlg.addEventListener('click', function (e) {
-      if (e.target.closest('button')) return;             // a clean hit on a control
-      if (!e.clientX && !e.clientY) return;               // keyboard-activated click
-      var pad = 12;
-      var nearControl = [prevBtn, nextBtn, dlg.querySelector('.viewer-close')]
-        .filter(function (b) { return b && !b.hidden; })
-        .some(function (b) {
-          var r = b.getBoundingClientRect();
-          return e.clientX >= r.left - pad && e.clientX <= r.right + pad &&
-                 e.clientY >= r.top  - pad && e.clientY <= r.bottom + pad;
-        });
-      if (nearControl) return;
+      if (e.target.closest('button')) return;   // a control handles its own click
       var ir = img.getBoundingClientRect();
       var onImage = e.clientX >= ir.left && e.clientX <= ir.right &&
                     e.clientY >= ir.top  && e.clientY <= ir.bottom;
