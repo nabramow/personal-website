@@ -370,15 +370,20 @@
   dialog.viewer::backdrop{ background:rgba(8,12,10,.78); }
   .viewer-inner{ width:100%; height:100%; overflow:auto; -webkit-overflow-scrolling:touch; display:grid; place-items:center; padding:1rem; }
   .viewer-inner img{ display:block; width:auto; max-width:min(90vw, 360px); height:auto; border-radius:14px; border:2px solid var(--ink); }
+  /* 48px, not 42: 44px is the minimum comfortable touch target, and a tap that
+     lands just off a button gets its click retargeted to the dialog, which used
+     to read as "dismiss". touch-action stops the double-tap-zoom delay too. */
   .viewer-close, .viewer-nav{
-    position:fixed; width:42px; height:42px; border-radius:50%;
+    position:fixed; width:48px; height:48px; border-radius:50%;
     border:2px solid var(--ink); background:var(--paper); color:var(--ink);
-    font:600 1.15rem/1 var(--font-body); cursor:pointer; display:grid; place-items:center;
+    font:600 1.25rem/1 var(--font-body); cursor:pointer; display:grid; place-items:center;
     transition:transform .16s ease, background .16s ease;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
   }
   .viewer-close:hover, .viewer-nav:hover{ background:var(--paper-2); transform:scale(1.08); }
+  .viewer-close:active, .viewer-nav:active{ transform:scale(.94); background:var(--paper-2); }
   .viewer-close{ top:.75rem; right:.85rem; }
-  .viewer-nav{ top:50%; margin-top:-21px; }
+  .viewer-nav{ top:50%; margin-top:-24px; }
   .viewer-prev{ left:.6rem; }
   .viewer-next{ right:.6rem; }
   .viewer-count{
@@ -693,13 +698,13 @@
 
         <div class="prev">
           <p class="eyebrow" style="margin-bottom:.5rem;">Impressive things I did at rad companies for cash monies</p>
-          <p class="prose"><img class="job-logo" src="images/articulate-icon.png" alt="" width="19" height="19" loading="lazy"><strong><a href="https://www.articulate.com/" target="_blank" rel="noopener">Articulate</a></strong>, the e-learning platform 125k organizations use for workplace training, including every company in the Fortune 100. I designed and built the glossary infrastructure that keeps brand-critical terms translated consistently at scale, one customers name in their case studies, plus the proof of concept for the localization API that now powers their in-house translation.</p>
+          <p class="prose"><img class="job-logo" src="images/articulate-icon.png" alt="" width="19" height="19" loading="lazy"><strong><a href="https://www.articulate.com/" target="_blank" rel="noopener">Articulate</a></strong>, the e-learning platform 125k organizations use for workplace training, including every company in the Fortune 100. I was on the team behind their AI localization product, where I built the proof of concept for the in-house translation API and saw it through to millions in ARR. I also designed and built its glossary infrastructure: it keeps brand-critical terms consistent at scale, and customers name it in their case studies.</p>
           <p class="prose"><img class="job-logo" src="images/hopkins-icon.png" alt="" width="19" height="19" loading="lazy"><strong><a href="https://www.hopkins.systems/" target="_blank" rel="noopener">Hopkins</a></strong>, legaltech making legal help more accessible, where I was the second full-time engineer hired. I built the client portal thousands of people use to follow their own cases, and the permissions system that let the company take on partner lawyers and legal insurers. The product is now a SaaS in its own right, <a href="https://www.caseflow.de/" target="_blank" rel="noopener">Caseflow</a>, and Hopkins went on to make the Financial Times&rsquo; list of <a href="https://rankings.statista.com/en/fastest-growing-companies/rankings/fastest-growing-companies-europe-2026" target="_blank" rel="noopener">Europe&rsquo;s fastest-growing companies for 2026</a>.</p>
           </div>
 
           <div class="prev">
             <p class="eyebrow" style="margin-bottom:.5rem;">And badass people I worked with solo, in my pyjamas, also for cash monies</p>
-            <p class="prose">I&rsquo;ve always run something of my own alongside the day job. Custom systems for creative entrepreneurs and small teams like <a href="https://www.mirakadavies.co.nz/" target="_blank" rel="noopener">Miraka Davies</a>, <a href="https://www.belindathomasinc.com/" target="_blank" rel="noopener">Belinda Thomas</a>, <a href="https://www.speakingsavvy.com.au/" target="_blank" rel="noopener">Lisa Evans</a>, <a href="https://www.snyderstrategies.me/" target="_blank" rel="noopener">Bethany Snyder</a>, and <a href="https://www.spacetoco.com/" target="_blank" rel="noopener">SpacetoCo</a>, who went on to land a deal on <a href="https://startupnews.com.au/news/spacetoco-went-swimming-with-sharks-and-survived/" target="_blank" rel="noopener">Shark Tank Australia</a>. I automated the processes they were doing by hand, built their online courses, sales funnels and landing pages, and designed each one so they could run it themselves.</p>
+            <p class="prose">I&rsquo;ve always run something of my own alongside the day job. In my previous life I built custom systems for creative entrepreneurs and small teams like <a href="https://www.mirakadavies.co.nz/" target="_blank" rel="noopener">Miraka Davies</a>, <a href="https://www.belindathomasinc.com/" target="_blank" rel="noopener">Belinda Thomas</a>, <a href="https://www.speakingsavvy.com.au/" target="_blank" rel="noopener">Lisa Evans</a>, <a href="https://www.snyderstrategies.me/" target="_blank" rel="noopener">Bethany Snyder</a>, and <a href="https://www.spacetoco.com/" target="_blank" rel="noopener">SpacetoCo</a>, who went on to land a deal on <a href="https://startupnews.com.au/news/spacetoco-went-swimming-with-sharks-and-survived/" target="_blank" rel="noopener">Shark Tank Australia</a>. I automated the processes they were doing by hand, built their online courses, sales funnels and landing pages, and designed each one so they could run it themselves.</p>
         </div>
 
       </div>
@@ -766,16 +771,16 @@
         <h2>Away from the keyboard</h2>
         <div class="quests">
           <div class="quest">
+            <div class="q-head">Beginner again 🤸</div>
+            <p>Reconnecting with everything I loved as a kid: acting classes, adult gymnastics, and dance class, where I reliably lose the choreography halfway through. Next scary goal: pick the violin and/or piano back up after a 20-year hiatus.</p>
+          </div>
+          <div class="quest">
             <div class="q-head">In the kitchen 🍜</div>
-            <p>Serious home cook, entirely plant-based, often fermenting something, and culinary alchemist. In a former life I ran a food and travel blog, Vegan Nom Noms, that did decently well.</p>
+            <p>Serious home cook, entirely plant-based, often fermenting something, and culinary alchemist. I once ran a food and travel blog, Vegan Nom Noms, that did decently well.</p>
           </div>
           <div class="quest">
             <div class="q-head">On the move ✈️</div>
             <p>An occasional digital nomad. It&rsquo;s my ongoing goal to have the weirdest background on the Zoom call. Best so far? The jungle, from an outdoor treehouse in Cambodia.</p>
-          </div>
-          <div class="quest">
-            <div class="q-head">Beginner again 🤸</div>
-            <p>Reconnecting with everything I loved as a kid: acting classes, adult gymnastics, and dance class, where I reliably lose the choreography halfway through. Next scary goal: pick the violin and/or piano back up after a 20-year hiatus.</p>
           </div>
         </div>
 
@@ -1005,9 +1010,27 @@
       if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
     });
 
-    // Click the backdrop or the padding around the image to dismiss.
+    // Tap outside the image to dismiss. Deliberately checked by COORDINATES, not
+    // by e.target: on a touchscreen a finger that shifts slightly between
+    // touchstart and touchend gets its click retargeted to the nearest common
+    // ancestor (the dialog), so a near-miss on an arrow used to close the viewer
+    // instead of paging. Padding each control's hit box forgives those near-misses.
     dlg.addEventListener('click', function (e) {
-      if (e.target === dlg || e.target === inner) dlg.close();
+      if (e.target.closest('button')) return;             // a clean hit on a control
+      if (!e.clientX && !e.clientY) return;               // keyboard-activated click
+      var pad = 12;
+      var nearControl = [prevBtn, nextBtn, dlg.querySelector('.viewer-close')]
+        .filter(function (b) { return b && !b.hidden; })
+        .some(function (b) {
+          var r = b.getBoundingClientRect();
+          return e.clientX >= r.left - pad && e.clientX <= r.right + pad &&
+                 e.clientY >= r.top  - pad && e.clientY <= r.bottom + pad;
+        });
+      if (nearControl) return;
+      var ir = img.getBoundingClientRect();
+      var onImage = e.clientX >= ir.left && e.clientX <= ir.right &&
+                    e.clientY >= ir.top  && e.clientY <= ir.bottom;
+      if (!onImage) dlg.close();
     });
     dlg.querySelector('.viewer-close').addEventListener('click', function () { dlg.close(); });
     // Drop the src on close so a stale image never flashes on the next open.
